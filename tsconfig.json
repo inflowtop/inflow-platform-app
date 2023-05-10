@@ -13,6 +13,7 @@
       "@hooks/*": ["./src/hooks/*"],
       "@@types/*": ["./src/@types/*"],
       "@styles/*": ["./src/styles/*"]
-    }
+    },
+    "typeRoots": ["./src/@types"]
   }
 }
