@@ -1,5 +1,11 @@
-import { Title } from "./styles";
+import { Text } from "react-native";
+
+import { Container } from "./styles";
 
 export const Home = () => {
-  return <Title>FALA HOME</Title>;
+  return (
+    <Container>
+      <Text>FALA HOME</Text>;
+    </Container>
+  );
 };

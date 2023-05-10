@@ -21,7 +21,8 @@
     "@typescript-eslint",
     "react-hooks",
     "import",
-    "prettier"
+    "prettier",
+    "eslint-plugin-import-helpers"
   ],
   "settings": {
     "react": {
@@ -38,6 +39,23 @@
     ],
     "indent": ["error", 2],
     "quotes": ["error", "double"],
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          ["/^react/", "/^react-native/"],
+          ["/^@expo/", "/^expo/"],
+          "/^@screens/",
+          "/^@components/",
+          "module",
+          ["parent", "sibling", "index"],
+          "/^styles/",
+          "/^@assets/"
+        ],
+        "alphabetize": { "order": "asc", "ignoreCase": true }
+      }
+    ]
   }
 }
