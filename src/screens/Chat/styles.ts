@@ -1,7 +1,13 @@
 import styled from "styled-components/native";
 
 export const Title = styled.Text`
-  color: #f5f5f5;
   font-size: 32px;
-  font-weight: bold;
+  text-align: center;
+  color: #6b7280;
+`;
+
+export const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 `;

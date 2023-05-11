@@ -1,17 +1,14 @@
-import { RectButton } from "react-native-gesture-handler";
-
 import styled from "styled-components/native";
 
-export const Container = styled(RectButton)`
+export const Container = styled.TouchableOpacity`
   width: 100%;
   max-width: 320px;
+  border-radius: 6px;
   padding: 16px;
   background-color: #1d4ed8;
-  border-radius: 4px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 8px;
 `;
 
 export const Title = styled.Text`
@@ -20,4 +17,5 @@ export const Title = styled.Text`
   font-size: 14px;
   font-family: "Inter_700Bold";
   text-align: center;
+  margin-left: 8px;
 `;

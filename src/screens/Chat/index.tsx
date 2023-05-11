@@ -1,5 +1,15 @@
-import { Title } from "./styles";
+import { Button } from "@components/Button";
+
+import { useNavigation } from "@react-navigation/native";
+
+import { Container, Title } from "./styles";
 
 export const Chat = () => {
-  return <Title>FALA CHAT</Title>;
+  const { goBack } = useNavigation();
+  return (
+    <Container>
+      <Title>FALA CHAT</Title>
+      <Button onPress={() => goBack()}>Go Back</Button>
+    </Container>
+  );
 };

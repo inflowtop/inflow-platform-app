@@ -1,14 +1,17 @@
+import { TouchableOpacityProps } from "react-native";
+
 import { Children } from "@@types/Children";
 
 import { Container, Title } from "./styles";
 
 type Props = {
   icon?: JSX.Element;
-} & Children;
+} & Children &
+  TouchableOpacityProps;
 
-export const Button = ({ children, icon }: Props) => {
+export const Button = ({ children, icon, ...rest }: Props) => {
   return (
-    <Container style={{ borderRadius: 4 }} activeOpacity={0.8}>
+    <Container activeOpacity={0.8} {...rest}>
       {icon && icon}
       <Title>{children}</Title>
     </Container>
