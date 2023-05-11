@@ -12,7 +12,8 @@
       "@assets/*": ["./src/assets/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@@types/*": ["./src/@types/*"],
-      "@styles/*": ["./src/styles/*"]
+      "@styles/*": ["./src/styles/*"],
+      "@src/*": ["./src/*"]
     },
     "typeRoots": ["./src/@types"]
   }

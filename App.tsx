@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import {
   Inter_400Regular,
@@ -10,7 +10,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 
-import { Home } from "@screens/Home";
+import { Routes } from "@src/routes";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,9 +32,11 @@ export default function App() {
   }
 
   return (
-    <View onLayout={onLayoutRootView}>
-      <StatusBar style="auto" translucent backgroundColor="transparent" />
-      <Home />
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <StatusBar style="auto" translucent backgroundColor="transparent" />
+        <Routes />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

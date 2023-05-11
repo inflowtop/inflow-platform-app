@@ -8,8 +8,8 @@ module.exports = function (api) {
         {
           envName: "APP_ENV",
           moduleName: "@env",
-          verbose: false,
-        },
+          verbose: false
+        }
       ],
       [
         "module-resolver",
@@ -23,9 +23,10 @@ module.exports = function (api) {
             "@hooks": "./src/hooks",
             "@@types": "./src/@types",
             "@styles": "./src/styles",
-          },
-        },
-      ],
-    ],
+            "@src": ["./src"]
+          }
+        }
+      ]
+    ]
   };
 };
