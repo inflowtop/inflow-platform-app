@@ -8,5 +8,11 @@
       "source.fixAll.eslint": true
     }
   },
-  "cSpell.words": ["commitlint", "mmkv", "Parens"]
+  "cSpell.words": [
+    "commitlint",
+    "inflowplatformapp",
+    "mmkv",
+    "Parens",
+    "patrickts"
+  ]
 }

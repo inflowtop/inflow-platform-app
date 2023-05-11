@@ -1,6 +1,6 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/common/Button";
 
-import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "@hooks/useAuth";
 import { GoogleLogo } from "phosphor-react-native";
 
 import { Brand, Container, Span } from "./styles";
@@ -8,14 +8,15 @@ import { Brand, Container, Span } from "./styles";
 import BrandLogo from "@assets/logo.png";
 
 export const Login = () => {
-  const navigation = useNavigation();
+  const { signIn, isUserLoading } = useAuth();
 
   return (
     <Container>
       <Brand source={BrandLogo} />
       <Button
         icon={<GoogleLogo color="#ffffff" size={20} weight="bold" />}
-        onPress={() => navigation.navigate("Home")}
+        disabled={isUserLoading}
+        onPress={() => signIn()}
       >
         Entrar com o google
       </Button>

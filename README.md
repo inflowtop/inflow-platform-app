@@ -16,10 +16,10 @@
 ## Screens
 
 - [x] Login
-- [] Home
+- [x] Home
 - [] Chat
 
 ## Functions
 
-- [] Sign in with Google
+- [x] Sign in with Google
 - [] Persistent authentication
