@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import {
   Inter_400Regular,
@@ -10,6 +10,9 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 
+import { Loading } from "@components/common/Loading";
+
+import { AuthContextProvider } from "@contexts/AuthContext";
 import { Routes } from "@src/routes";
 
 SplashScreen.preventAutoHideAsync();
@@ -21,22 +24,18 @@ export default function App() {
     Inter_700Bold
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
   if (!fontsLoaded) {
-    return null;
+    return <Loading />;
   }
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <View style={{ flex: 1 }}>
         <StatusBar style="auto" translucent backgroundColor="transparent" />
-        <Routes />
-      </SafeAreaView>
+        <AuthContextProvider>
+          <Routes />
+        </AuthContextProvider>
+      </View>
     </SafeAreaProvider>
   );
 }
