@@ -1,11 +1,14 @@
 import { createContext, useEffect, useState } from "react";
+import { MMKV } from "react-native-mmkv";
 
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
-import { Children } from "@@types/Children";
-import { User } from "@@types/User";
+import { Children, User } from "@@types/index";
 import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
+import { authAPI } from "@src/config/api/auth";
+
+const storage = new MMKV({ id: "inflow" });
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -27,6 +30,14 @@ export const AuthContextProvider = ({ children }: Children) => {
     iosClientId: GOOGLE_ANDROID_CLIENT_ID
   });
 
+  function getUserInStorage() {
+    const user = storage.getString("user");
+
+    if (!user) return null;
+
+    return JSON.parse(user);
+  }
+
   async function handleSignInWithGoogle() {
     try {
       setIsUserLoading(prev => !prev);
@@ -47,24 +58,31 @@ export const AuthContextProvider = ({ children }: Children) => {
     if (!token) return;
 
     try {
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
+      const { data } = await authAPI.get<User>("/me", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
-      const user = await response.json();
-      setUserInfo(user);
+      storage.set("user", JSON.stringify(data));
+      setUserInfo(data);
     } catch (error) {
       console.log(error);
     }
   }
 
   async function userVerification() {
-    if (response?.type === "success" && response.authentication?.accessToken) {
-      setToken(response.authentication.accessToken);
-      getUserInfo(response.authentication.accessToken);
+    const userInStorage = getUserInStorage();
+    console.log(userInStorage);
+
+    if (!userInStorage) {
+      if (
+        response?.type === "success" &&
+        response.authentication?.accessToken
+      ) {
+        setToken(response.authentication.accessToken);
+        getUserInfo(response.authentication.accessToken);
+      }
+    } else {
+      setUserInfo(userInStorage);
     }
   }
 

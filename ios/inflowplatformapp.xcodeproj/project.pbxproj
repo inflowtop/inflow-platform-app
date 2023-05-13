@@ -14,7 +14,7 @@
 		96905EF65AED1B983A6B3ABC /* libPods-inflowplatformapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-inflowplatformapp.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
-		35ABECE1A1164ECB821406E0 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6381BFA368F54C88B087E82D /* noop-file.swift */; };
+		32D4734B9C2F4D25A84A035B /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE623F4A8AEE4384836FDF5A /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,7 +32,7 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-inflowplatformapp/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		6381BFA368F54C88B087E82D /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "inflowplatformapp/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		EE623F4A8AEE4384836FDF5A /* noop-file.swift */ = {isa = PBXFileReference; name = "noop-file.swift"; path = "inflowplatformapp/noop-file.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +58,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				6381BFA368F54C88B087E82D /* noop-file.swift */,
+				EE623F4A8AEE4384836FDF5A /* noop-file.swift */,
 			);
 			name = inflowplatformapp;
 			sourceTree = "<group>";
@@ -292,7 +292,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
-				35ABECE1A1164ECB821406E0 /* noop-file.swift in Sources */,
+				32D4734B9C2F4D25A84A035B /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
