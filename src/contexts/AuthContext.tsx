@@ -1,16 +1,11 @@
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
 import { Children } from "@@types/Children";
 import { User } from "@@types/User";
-import {
-  GOOGLE_ANDROID_CLIENT_ID,
-  GOOGLE_EXPO_CLIENT_ID,
-  GOOGLE_IOS_CLIENT_ID,
-  GOOGLE_WEB_CLIENT_ID
-} from "@env";
+import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -28,13 +23,11 @@ export const AuthContextProvider = ({ children }: Children) => {
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   const [, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: GOOGLE_EXPO_CLIENT_ID,
-    iosClientId: GOOGLE_IOS_CLIENT_ID,
     androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: GOOGLE_WEB_CLIENT_ID
+    iosClientId: GOOGLE_ANDROID_CLIENT_ID
   });
 
-    async function handleSignInWithGoogle() {
+  async function handleSignInWithGoogle() {
     try {
       setIsUserLoading(prev => !prev);
       await promptAsync();
@@ -46,8 +39,7 @@ export const AuthContextProvider = ({ children }: Children) => {
     }
   }
 
-
-   function signIn() {
+  function signIn() {
     handleSignInWithGoogle();
   }
 
@@ -81,6 +73,8 @@ export const AuthContextProvider = ({ children }: Children) => {
   }, [response, token]);
 
   return (
-    <AuthContext.Provider value={{ signIn, userInfo, isUserLoading }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ signIn, userInfo, isUserLoading }}>
+      {children}
+    </AuthContext.Provider>
   );
 };

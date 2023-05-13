@@ -21,5 +21,5 @@
 
 ## Functions
 
-- [] Sign in with Google
+- [x] Sign in with Google
 - [] Persistent authentication
