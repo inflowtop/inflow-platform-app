@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const Brand = styled(Image).attrs({ contentFit: "contain" })`
   width: 288px;
   height: 80px;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
 `;
 
 export const Span = styled.Text`
