@@ -7,15 +7,12 @@ import {
   Inter_700Bold,
   useFonts
 } from "@expo-google-fonts/inter";
-import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 
 import { Loading } from "@components/common/Loading";
 
 import { AuthContextProvider } from "@contexts/AuthContext";
 import { Routes } from "@src/routes";
-
-SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -16,7 +16,7 @@
 ## Screens
 
 - [x] Login
-- [x] Home
+- [] Home
 - [] Chat
 
 ## Functions
