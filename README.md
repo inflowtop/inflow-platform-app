@@ -9,17 +9,14 @@
 - [x] eslint and prettier
 - [x] husky, lint staged and commitlint
 - [x] react navigation - stack
-- [] axios
-- [] mmkv https://github.com/mrousavy/react-native-mmkv
-- [] google oauth https://docs.expo.dev/guides/google-authentication/
 
 ## Screens
 
 - [x] Login
-- [] Home
+- [x] Home
 - [] Chat
 
 ## Functions
 
 - [x] Sign in with Google
-- [] Persistent authentication
+- [x] Persistent authentication

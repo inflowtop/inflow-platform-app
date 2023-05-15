@@ -32,6 +32,12 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>com.googleusercontent.apps.870928729441-tuqcg7sbjkcukkjh3rthjslk7e25ubl1</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
           <string>exp+inflow-platform-app</string>
         </array>
       </dict>

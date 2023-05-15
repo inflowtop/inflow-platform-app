@@ -5,11 +5,11 @@ import { AppRoutes } from "./app.routes";
 import { AuthRoutes } from "./auth.routes";
 
 export const Routes = () => {
-  const { userInfo } = useAuth();
+  const { token } = useAuth();
 
   return (
     <NavigationContainer>
-      {Object.keys(userInfo).length === 0 ? <AuthRoutes /> : <AppRoutes />}
+      {!token ? <AuthRoutes /> : <AppRoutes />}
     </NavigationContainer>
   );
 };

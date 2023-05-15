@@ -15,10 +15,11 @@ export const Login = () => {
       <Brand source={BrandLogo} />
       <Button
         icon={<GoogleLogo color="#ffffff" size={20} weight="bold" />}
-        disabled={isUserLoading}
         onPress={() => signIn()}
+        disabled={isUserLoading}
+        isLoading={isUserLoading}
       >
-        Entrar com o google
+        Entre com o google
       </Button>
       <Span>
         Não utilizamos nenhuma informação além {"\n"} do seu e-mail para criação

@@ -1,97 +1,81 @@
 import { createContext, useEffect, useState } from "react";
-import { MMKV } from "react-native-mmkv";
-
-import * as Google from "expo-auth-session/providers/google";
-import * as WebBrowser from "expo-web-browser";
 
 import { Children, User } from "@@types/index";
-import { GOOGLE_ANDROID_CLIENT_ID } from "@env";
-import { authAPI } from "@src/config/api/auth";
-
-const storage = new MMKV({ id: "inflow" });
-
-WebBrowser.maybeCompleteAuthSession();
+import { FIREBASE_ANDROID_CLIENT } from "@env";
+import auth from "@react-native-firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 type AuthDataProps = {
+  token: string | null;
   userInfo: User;
   isUserLoading: boolean;
   signIn: () => void;
+  signOut: () => void;
 };
+
+GoogleSignin.configure({
+  webClientId: FIREBASE_ANDROID_CLIENT
+});
 
 export const AuthContext = createContext({} as AuthDataProps);
 
 export const AuthContextProvider = ({ children }: Children) => {
-  const [token, setToken] = useState("");
-  const [userInfo, setUserInfo] = useState({} as User);
+  const [token, setToken] = useState<string | null>("");
+  const [userInfo, setUserInfo] = useState<User>({} as User);
   const [isUserLoading, setIsUserLoading] = useState(false);
-
-  const [, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-    iosClientId: GOOGLE_ANDROID_CLIENT_ID
-  });
-
-  function getUserInStorage() {
-    const user = storage.getString("user");
-
-    if (!user) return null;
-
-    return JSON.parse(user);
-  }
 
   async function handleSignInWithGoogle() {
     try {
-      setIsUserLoading(prev => !prev);
-      await promptAsync();
-    } catch (err) {
-      console.log(err);
-      throw err;
-    } finally {
-      setIsUserLoading(prev => !prev);
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true
+      });
+
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      const { user } = await auth().signInWithCredential(googleCredential);
+
+      setToken(idToken);
+      setUserInfo(user);
+    } catch (error) {
+      console.log(`ERROR => ${error}`);
     }
   }
 
-  function signIn() {
-    handleSignInWithGoogle();
-  }
-
-  async function getUserInfo(token: string) {
-    if (!token) return;
-
+  async function handleSignOut() {
     try {
-      const { data } = await authAPI.get<User>("/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      storage.set("user", JSON.stringify(data));
-      setUserInfo(data);
+      await GoogleSignin.revokeAccess();
+      await auth().signOut();
+      setUserInfo({} as User);
+      setToken(null);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function userVerification() {
-    const userInStorage = getUserInStorage();
-    console.log(userInStorage);
+  function signIn() {
+    setIsUserLoading(true);
+    handleSignInWithGoogle();
+  }
 
-    if (!userInStorage) {
-      if (
-        response?.type === "success" &&
-        response.authentication?.accessToken
-      ) {
-        setToken(response.authentication.accessToken);
-        getUserInfo(response.authentication.accessToken);
-      }
-    } else {
-      setUserInfo(userInStorage);
-    }
+  function signOut() {
+    setIsUserLoading(true);
+    handleSignOut();
+    setIsUserLoading(false);
   }
 
   useEffect(() => {
-    userVerification();
-  }, [response, token]);
+    const listener = auth().onAuthStateChanged(user => {
+      setUserInfo(user!);
+    });
+
+    return listener;
+  }, [token]);
 
   return (
-    <AuthContext.Provider value={{ signIn, userInfo, isUserLoading }}>
+    <AuthContext.Provider
+      value={{ signIn, userInfo, isUserLoading, signOut, token }}
+    >
       {children}
     </AuthContext.Provider>
   );
