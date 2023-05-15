@@ -1,8 +1,8 @@
 import { TouchableOpacity } from "react-native";
 
 import { useAuth } from "@hooks/useAuth";
-import { CaretLeft } from "phosphor-react-native";
 
+import { ButtonGoBack } from "./ButtonGoBack";
 import { Container, Image } from "./styles";
 
 type HeaderProps = {
@@ -14,7 +14,7 @@ export const Header = ({ buttonGoBack }: HeaderProps) => {
 
   return (
     <Container>
-      {buttonGoBack && <CaretLeft />}
+      {buttonGoBack && <ButtonGoBack />}
       <TouchableOpacity activeOpacity={0.8}>
         <Image source={userInfo.photoURL} />
       </TouchableOpacity>

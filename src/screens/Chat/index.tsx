@@ -1,19 +1,21 @@
-import { Button } from "@components/common/Button";
+import { Contact } from "@components/Chat/Contact";
+import { Search } from "@components/Chat/Search";
+import { Header } from "@components/common/Header";
 
-import { useNavigation } from "@react-navigation/native";
-
-import { Container } from "./styles";
+import { ContactContainer, Container, Content } from "./styles";
 
 export const Chat = () => {
-  const { goBack } = useNavigation();
-  // const { userInfo } = useAuth();
-
   return (
     <Container>
-      {/* <Title>FALA {userInfo.name}</Title> */}
-      {/* <Text style={{ fontSize: 20 }}>Seu email é {userInfo.email}</Text> */}
-
-      <Button onPress={() => goBack()}>Go Back</Button>
+      <Header buttonGoBack />
+      <Content>
+        <Search />
+        <ContactContainer>
+          <Contact status="ONLINE" />
+          <Contact />
+          <Contact />
+        </ContactContainer>
+      </Content>
     </Container>
   );
 };

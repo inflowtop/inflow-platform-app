@@ -4,14 +4,14 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   width: 100%;
-  padding-left: 32px;
-  padding-right: 32px;
+  padding: 12px 24px;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
 `;
 
 export const Image = styled(ExpoImage)`
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
 `;
