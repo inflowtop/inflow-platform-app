@@ -31,12 +31,6 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
     "indent": ["error", 2],
     "quotes": ["error", "double"],
     "semi": ["error", "always"],
