@@ -1,12 +1,11 @@
-import { Button } from "@components/common/Button";
-import { Header } from "@components/common/Header";
-import { Loading } from "@components/common/Loading";
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Button, Header, Loading } from "@components/common/";
 import { useAuth } from "@hooks/useAuth";
+
 import { useNavigation } from "@react-navigation/native";
 import { ChatCircleDots } from "phosphor-react-native";
-
-import { Container, Content } from "./styles";
 
 export const Home = () => {
   const { userInfo } = useAuth();
@@ -17,16 +16,16 @@ export const Home = () => {
   }
 
   return (
-    <Container>
+    <SafeAreaView className="flex-1">
       <Header />
-      <Content>
+      <View className="flex-1 items-center justify-center">
         <Button
           icon={<ChatCircleDots color="white" size={20} weight="bold" />}
           onPress={() => navigate("Chat")}
         >
           Acessar chat
         </Button>
-      </Content>
-    </Container>
+      </View>
+    </SafeAreaView>
   );
 };

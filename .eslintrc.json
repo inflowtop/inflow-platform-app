@@ -47,12 +47,17 @@
         "groups": [
           ["/^react/", "/^react-native/"],
           ["/^@expo/", "/^expo/"],
-          "/^@screens/",
-          "/^@components/",
-          "module",
-          ["parent", "sibling", "index"],
-          "/^styles/",
-          "/^@assets/"
+          [
+            "/^@src/",
+            "/^@screens/",
+            "/^@components/",
+            "/^@contexts/",
+            "/^@hooks/",
+            "/^@assets/",
+            "/^@@types/"
+          ],
+          "/^nativewind/",
+          ["parent", "sibling", "index"]
         ],
         "alphabetize": { "order": "asc", "ignoreCase": true }
       }

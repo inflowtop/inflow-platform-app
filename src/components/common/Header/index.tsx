@@ -1,9 +1,10 @@
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+
+import { Image } from "expo-image";
 
 import { useAuth } from "@hooks/useAuth";
 
 import { ButtonGoBack } from "./ButtonGoBack";
-import { Container, Image } from "./styles";
 
 type HeaderProps = {
   buttonGoBack?: boolean;
@@ -13,11 +14,11 @@ export const Header = ({ buttonGoBack }: HeaderProps) => {
   const { userInfo } = useAuth();
 
   return (
-    <Container>
+    <View className="w-full flex-row items-center justify-between px-6 py-3">
       {buttonGoBack && <ButtonGoBack />}
       <TouchableOpacity activeOpacity={0.8}>
-        <Image source={userInfo.photoURL} />
+        <Image source={userInfo.photoURL} className="h-10 w-10 rounded-full" />
       </TouchableOpacity>
-    </Container>
+    </View>
   );
 };

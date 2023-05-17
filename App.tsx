@@ -9,8 +9,7 @@ import {
 } from "@expo-google-fonts/inter";
 import { StatusBar } from "expo-status-bar";
 
-import { Loading } from "@components/common/Loading";
-
+import { Loading } from "@components/common";
 import { AuthContextProvider } from "@contexts/AuthContext";
 import { Routes } from "@src/routes";
 
@@ -27,7 +26,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <View style={{ flex: 1 }}>
+      <View className="flex-1">
         <StatusBar style="auto" translucent backgroundColor="transparent" />
         <AuthContextProvider>
           <Routes />

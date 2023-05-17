@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 
 import { Children, User } from "@@types/index";
+
 import { FIREBASE_ANDROID_CLIENT } from "@env";
 import auth from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -32,6 +33,8 @@ export const AuthContextProvider = ({ children }: Children) => {
 
       const { idToken } = await GoogleSignin.signIn();
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      console.log("ACCESS TOKEN ==> ", idToken);
 
       const { user } = await auth().signInWithCredential(googleCredential);
 
