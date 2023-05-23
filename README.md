@@ -20,3 +20,14 @@
 
 - [x] Sign in with Google
 - [x] Persistent authentication
+- [ ] Integration with Sendbird
+- [ ] Login with Sendbird
+
+## All steps
+
+- [x] Create expo project
+- [x] Setup project with typescript, eslint and prettier
+- [x] Using tailwindcss
+- [x] Setup React Navigation
+- [x] Implement Firebase authentication with google
+- [ ] Integration with Sendbird
