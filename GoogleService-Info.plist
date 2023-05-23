@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>870928729441-tuqcg7sbjkcukkjh3rthjslk7e25ubl1.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.870928729441-tuqcg7sbjkcukkjh3rthjslk7e25ubl1</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>870928729441-8u8rvslseec9n2joeh23nnbp32nf16ec.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAlaHorzQG1H0Dlpjiu2COyRMQNxR0Px9I</string>
+	<key>GCM_SENDER_ID</key>
+	<string>870928729441</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.patrickts.inflowplatformapp</string>
+	<key>PROJECT_ID</key>
+	<string>inflow-app-platform</string>
+	<key>STORAGE_BUCKET</key>
+	<string>inflow-app-platform.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:870928729441:ios:596cb1b346ce5303fd7120</string>
+</dict>
+</plist>
