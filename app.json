@@ -12,32 +12,33 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.patrickts.inflowplatformapp",
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "bundleIdentifier": "com.inflowusa.inflowplatformapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.patrickts.inflowplatformapp",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.inflowusa.inflowplatformapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "7e82718d-43ef-4a7a-ac93-d8d6ae5a81d4"
+        "projectId": "b62e6d1c-454f-41be-a79b-aafd14ae9d93"
       }
     },
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
       "@react-native-google-signin/google-signin"
-    ]
+    ],
+    "owner": "inflowusa"
   }
 }

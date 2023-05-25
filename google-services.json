@@ -1,48 +1,48 @@
 {
   "project_info": {
-    "project_number": "870928729441",
-    "project_id": "inflow-app-platform",
-    "storage_bucket": "inflow-app-platform.appspot.com"
+    "project_number": "316116381091",
+    "project_id": "inflow-platform-app",
+    "storage_bucket": "inflow-platform-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:870928729441:android:84080dd7d6be50e8fd7120",
+        "mobilesdk_app_id": "1:316116381091:android:1231e577d35133271c7e16",
         "android_client_info": {
-          "package_name": "com.patrickts.inflowplatformapp"
+          "package_name": "com.inflowusa.inflowplatformapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "870928729441-8u8rvslseec9n2joeh23nnbp32nf16ec.apps.googleusercontent.com",
+          "client_id": "316116381091-ifeb43ilu9q81k675k38c1d9so5gqln0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.patrickts.inflowplatformapp",
-            "certificate_hash": "1a64e0bc2f609563c6ea6d1f7522d2f8e7c5074c"
+            "package_name": "com.inflowusa.inflowplatformapp",
+            "certificate_hash": "09c4b72c219519fca27bf85bb7f272bc56929774"
           }
         },
         {
-          "client_id": "870928729441-l80unq7hstr79ts8k9n773o14i405uv1.apps.googleusercontent.com",
+          "client_id": "316116381091-olr73d8shn1rvnog1cimap8kqn9haoqn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA5C6oWyf8s9sDTzhb1EH9uPo6dmvcsfUs"
+          "current_key": "AIzaSyCp-Z2wbxv7WTK4_O-2l5_VmtrDvOnOJrE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "870928729441-0abc91osb5bgovs8rkt1f6hd0h6sd2mg.apps.googleusercontent.com",
+              "client_id": "316116381091-olr73d8shn1rvnog1cimap8kqn9haoqn.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "870928729441-tuqcg7sbjkcukkjh3rthjslk7e25ubl1.apps.googleusercontent.com",
+              "client_id": "316116381091-dauvmkmuhl7d15pbup8u3mr3ef8bhvmd.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.patrickts.inflowplatformapp"
+                "bundle_id": "com.inflowusa.inflowplatformapp"
               }
             }
           ]
