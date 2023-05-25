@@ -31,3 +31,10 @@
 - [x] Setup React Navigation
 - [x] Implement Firebase authentication with google
 - [ ] Integration with Sendbird
+  - [ ] Install `yarn add @sendbird/chat`
+  - [ ] Install `npx expo install @react-native-async-storage/async-storage`
+  - [ ] Create connection to sendbird using **userId**
+  - [ ] Create channel (private channel group)
+  - [ ] Connect to the Sendbird server
+    - [ ] Connect or create user on sendbird server: https://sendbird.com/docs/chat/v4/javascript/application/authenticating-a-user/authentication
+  - [ ] Push notification

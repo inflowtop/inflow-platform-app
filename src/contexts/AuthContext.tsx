@@ -69,7 +69,9 @@ export const AuthContextProvider = ({ children }: Children) => {
 
   useEffect(() => {
     const listener = auth().onAuthStateChanged(user => {
-      setUserInfo(user!);
+      if (user) {
+        setUserInfo(user);
+      }
     });
 
     return listener;
