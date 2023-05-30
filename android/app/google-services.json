@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "316116381091",
+    "project_id": "inflow-platform-app",
+    "storage_bucket": "inflow-platform-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316116381091:android:1231e577d35133271c7e16",
+        "android_client_info": {
+          "package_name": "com.inflowusa.inflowplatformapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316116381091-ifeb43ilu9q81k675k38c1d9so5gqln0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inflowusa.inflowplatformapp",
+            "certificate_hash": "09c4b72c219519fca27bf85bb7f272bc56929774"
+          }
+        },
+        {
+          "client_id": "316116381091-olr73d8shn1rvnog1cimap8kqn9haoqn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp-Z2wbxv7WTK4_O-2l5_VmtrDvOnOJrE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316116381091-olr73d8shn1rvnog1cimap8kqn9haoqn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "316116381091-dauvmkmuhl7d15pbup8u3mr3ef8bhvmd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.inflowusa.inflowplatformapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

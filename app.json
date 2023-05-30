@@ -17,14 +17,16 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.inflowusa.inflowplatformapp"
+      "bundleIdentifier": "com.inflowusa.inflowplatformapp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.inflowusa.inflowplatformapp"
+      "package": "com.inflowusa.inflowplatformapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
