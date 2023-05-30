@@ -1,8 +1,8 @@
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Contact, Search } from "@components/Chat";
-import { Header } from "@components/common";
+import { Contact, Search } from '@components/Chat'
+import { Header } from '@components/common'
 
 export const ChatHome = () => {
   return (
@@ -17,5 +17,5 @@ export const ChatHome = () => {
         </View>
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}

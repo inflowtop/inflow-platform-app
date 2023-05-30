@@ -1,3 +1,5 @@
 {
-  "**/*.{tsx, js, json}": ["yarn eslint --fix", "yarn prettier --check"]
+  "**/*.{tsx, js, json}": [
+    "yarn eslint --fix"
+  ]
 }

@@ -1,27 +1,27 @@
-import { View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { View } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 import {
   Inter_400Regular,
   Inter_500Medium,
   Inter_700Bold,
-  useFonts
-} from "@expo-google-fonts/inter";
-import { StatusBar } from "expo-status-bar";
+  useFonts,
+} from '@expo-google-fonts/inter'
+import { StatusBar } from 'expo-status-bar'
 
-import { Loading } from "@components/common";
-import { AuthContextProvider } from "@contexts/AuthContext";
-import { Routes } from "@src/routes";
+import { Loading } from '@components/common'
+import { AuthContextProvider } from '@contexts/AuthContext'
+import { Routes } from '@src/routes'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
-    Inter_700Bold
-  });
+    Inter_700Bold,
+  })
 
   if (!fontsLoaded) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
@@ -33,5 +33,5 @@ export default function App() {
         </AuthContextProvider>
       </View>
     </SafeAreaProvider>
-  );
+  )
 }

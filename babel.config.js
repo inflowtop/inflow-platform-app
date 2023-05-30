@@ -1,33 +1,33 @@
 module.exports = function (api) {
-  api.cache(true);
+  api.cache(true)
   return {
-    presets: ["babel-preset-expo"],
+    presets: ['babel-preset-expo'],
     plugins: [
-      "nativewind/babel",
+      'nativewind/babel',
       [
-        "module:react-native-dotenv",
+        'module:react-native-dotenv',
         {
-          envName: "APP_ENV",
-          moduleName: "@env",
-          verbose: false
-        }
+          envName: 'APP_ENV',
+          moduleName: '@env',
+          verbose: false,
+        },
       ],
       [
-        "module-resolver",
+        'module-resolver',
         {
-          root: ["./src"],
-          extensions: [".ts", ".tsx", ".json", ".js"],
+          root: ['./src'],
+          extensions: ['.ts', '.tsx', '.json', '.js'],
           alias: {
-            "@components": "./src/components",
-            "@screens": "./src/screens",
-            "@assets": "./src/assets",
-            "@hooks": "./src/hooks",
-            "@contexts": "./src/contexts",
-            "@@types": "./src/@types",
-            "@src": ["./src"]
-          }
-        }
-      ]
-    ]
-  };
-};
+            '@components': './src/components',
+            '@screens': './src/screens',
+            '@assets': './src/assets',
+            '@hooks': './src/hooks',
+            '@contexts': './src/contexts',
+            '@@types': './src/@types',
+            '@src': ['./src'],
+          },
+        },
+      ],
+    ],
+  }
+}

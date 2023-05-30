@@ -1,9 +1,9 @@
-import { ChatHome } from "@screens/Chat";
-import { Home } from "@screens/Platform";
+import { ChatHome } from '@screens/Chat'
+import { Home } from '@screens/Platform'
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const { Navigator, Screen } = createNativeStackNavigator();
+const { Navigator, Screen } = createNativeStackNavigator()
 
 export const AppRoutes = () => {
   return (
@@ -11,5 +11,5 @@ export const AppRoutes = () => {
       <Screen name="Home" component={Home} />
       <Screen name="Chat" component={ChatHome} />
     </Navigator>
-  );
-};
+  )
+}

@@ -1,21 +1,21 @@
-import { Text, View } from "react-native";
+import { Text, View } from 'react-native'
 
-import { Image } from "expo-image";
+import { Image } from 'expo-image'
 
-import { useAuth } from "@hooks/useAuth";
+import { useAuth } from '@hooks/useAuth'
 
-import { styled } from "nativewind";
+import { styled } from 'nativewind'
 
-import { Circle } from "phosphor-react-native";
+import { Circle } from 'phosphor-react-native'
 
 type ContactProps = {
-  status?: "ONLINE" | "OFFLINE";
-};
+  status?: 'ONLINE' | 'OFFLINE'
+}
 
-const BulletIndicator = styled(Circle);
+const BulletIndicator = styled(Circle)
 
 export const Contact = ({ status }: ContactProps) => {
-  const { userInfo } = useAuth();
+  const { userInfo } = useAuth()
   return (
     <View className="relative flex-row items-center gap-4 pb-6">
       {status && (
@@ -30,5 +30,5 @@ export const Contact = ({ status }: ContactProps) => {
         <Text className="text-gray-500">Online</Text>
       </View>
     </View>
-  );
-};
+  )
+}

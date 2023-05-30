@@ -1,11 +1,11 @@
-import { TextInput, View } from "react-native";
+import { TextInput, View } from 'react-native'
 
-import { styled } from "nativewind";
+import { styled } from 'nativewind'
 
-import { MagnifyingGlass } from "phosphor-react-native";
-import colors from "tailwindcss/colors";
+import { MagnifyingGlass } from 'phosphor-react-native'
+import colors from 'tailwindcss/colors'
 
-const GlassIcon = styled(MagnifyingGlass);
+const GlassIcon = styled(MagnifyingGlass)
 
 export const Search = () => {
   return (
@@ -20,5 +20,5 @@ export const Search = () => {
         placeholderTextColor={colors.gray[400]}
       />
     </View>
-  );
-};
+  )
+}

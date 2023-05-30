@@ -1,81 +1,81 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from 'react'
 
-import { Children, User } from "@@types/index";
+import { Children, User } from '@@types/index'
 
-import { FIREBASE_ANDROID_CLIENT } from "@env";
-import auth from "@react-native-firebase/auth";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { FIREBASE_ANDROID_CLIENT } from '@env'
+import auth from '@react-native-firebase/auth'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 type AuthDataProps = {
-  token: string | null;
-  userInfo: User;
-  isUserLoading: boolean;
-  signIn: () => void;
-  signOut: () => void;
-};
+  token: string | null
+  userInfo: User
+  isUserLoading: boolean
+  signIn: () => void
+  signOut: () => void
+}
 
 GoogleSignin.configure({
-  webClientId: FIREBASE_ANDROID_CLIENT
-});
+  webClientId: FIREBASE_ANDROID_CLIENT,
+})
 
-export const AuthContext = createContext({} as AuthDataProps);
+export const AuthContext = createContext({} as AuthDataProps)
 
 export const AuthContextProvider = ({ children }: Children) => {
-  const [token, setToken] = useState<string | null>("");
-  const [userInfo, setUserInfo] = useState<User>({} as User);
-  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [token, setToken] = useState<string | null>('')
+  const [userInfo, setUserInfo] = useState<User>({} as User)
+  const [isUserLoading, setIsUserLoading] = useState(false)
 
   async function handleSignInWithGoogle() {
     try {
       await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true
-      });
+        showPlayServicesUpdateDialog: true,
+      })
 
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      const { idToken } = await GoogleSignin.signIn()
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken)
 
-      console.log("ACCESS TOKEN ==> ", idToken);
+      console.log('ACCESS TOKEN ==> ', idToken)
 
-      const { user } = await auth().signInWithCredential(googleCredential);
+      const { user } = await auth().signInWithCredential(googleCredential)
 
-      setToken(idToken);
-      setUserInfo(user);
+      setToken(idToken)
+      setUserInfo(user)
     } catch (error) {
-      console.log(`ERROR => ${error}`);
+      console.log(`ERROR => ${error}`)
     }
   }
 
   async function handleSignOut() {
     try {
-      await GoogleSignin.revokeAccess();
-      await auth().signOut();
-      setUserInfo({} as User);
-      setToken(null);
+      await GoogleSignin.revokeAccess()
+      await auth().signOut()
+      setUserInfo({} as User)
+      setToken(null)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 
   function signIn() {
-    setIsUserLoading(true);
-    handleSignInWithGoogle();
+    setIsUserLoading(true)
+    handleSignInWithGoogle()
   }
 
   function signOut() {
-    setIsUserLoading(true);
-    handleSignOut();
-    setIsUserLoading(false);
+    setIsUserLoading(true)
+    handleSignOut()
+    setIsUserLoading(false)
   }
 
   useEffect(() => {
-    const listener = auth().onAuthStateChanged(user => {
+    const listener = auth().onAuthStateChanged((user) => {
       if (user) {
-        setUserInfo(user);
+        setUserInfo(user)
       }
-    });
+    })
 
-    return listener;
-  }, [token]);
+    return listener
+  }, [token])
 
   return (
     <AuthContext.Provider
@@ -83,5 +83,5 @@ export const AuthContextProvider = ({ children }: Children) => {
     >
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}

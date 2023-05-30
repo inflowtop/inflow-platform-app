@@ -1,17 +1,18 @@
+import { ReactNode } from 'react'
 import {
   ActivityIndicator,
   Text,
   TouchableOpacity,
-  TouchableOpacityProps
-} from "react-native";
+  TouchableOpacityProps,
+} from 'react-native'
 
-import { Children } from "@@types/Children";
+import { Children } from '@@types/Children'
 
 type Props = {
-  icon?: JSX.Element;
-  isLoading?: boolean;
+  icon?: ReactNode
+  isLoading?: boolean
 } & Children &
-  TouchableOpacityProps;
+  TouchableOpacityProps
 
 export const Button = ({ children, isLoading, icon, ...rest }: Props) => {
   return (
@@ -31,5 +32,5 @@ export const Button = ({ children, isLoading, icon, ...rest }: Props) => {
         </>
       )}
     </TouchableOpacity>
-  );
-};
+  )
+}
