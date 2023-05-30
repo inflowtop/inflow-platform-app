@@ -1,3 +1,4 @@
+import { ChatContextProvider } from '@contexts/ChatContext'
 import { ChatHome } from '@screens/Chat'
 import { Home } from '@screens/Platform'
 
@@ -7,9 +8,11 @@ const { Navigator, Screen } = createNativeStackNavigator()
 
 export const AppRoutes = () => {
   return (
-    <Navigator screenOptions={{ headerShown: false }}>
-      <Screen name="Home" component={Home} />
-      <Screen name="Chat" component={ChatHome} />
-    </Navigator>
+    <ChatContextProvider>
+      <Navigator screenOptions={{ headerShown: false }}>
+        <Screen name="Home" component={Home} />
+        <Screen name="Chat" component={ChatHome} />
+      </Navigator>
+    </ChatContextProvider>
   )
 }

@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 
 import { Children, User } from '@@types/index'
+import { useChatContext } from '@hooks/useChatInfo'
 
 import { FIREBASE_ANDROID_CLIENT } from '@env'
 import auth from '@react-native-firebase/auth'
@@ -25,6 +26,8 @@ export const AuthContextProvider = ({ children }: Children) => {
   const [userInfo, setUserInfo] = useState<User>({} as User)
   const [isUserLoading, setIsUserLoading] = useState(false)
 
+  const { connectUserInChat } = useChatContext()
+
   async function handleSignInWithGoogle() {
     try {
       await GoogleSignin.hasPlayServices({
@@ -34,12 +37,12 @@ export const AuthContextProvider = ({ children }: Children) => {
       const { idToken } = await GoogleSignin.signIn()
       const googleCredential = auth.GoogleAuthProvider.credential(idToken)
 
-      console.log('ACCESS TOKEN ==> ', idToken)
-
       const { user } = await auth().signInWithCredential(googleCredential)
 
       setToken(idToken)
       setUserInfo(user)
+      connectUserInChat(user.uid)
+      setIsUserLoading(false)
     } catch (error) {
       console.log(`ERROR => ${error}`)
     }
