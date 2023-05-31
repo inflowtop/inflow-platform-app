@@ -26,7 +26,8 @@ export const AuthContextProvider = ({ children }: Children) => {
   const [userInfo, setUserInfo] = useState<User>({} as User)
   const [isUserLoading, setIsUserLoading] = useState(false)
 
-  const { connectUserInChat } = useChatContext()
+  const { connectUserInChat, updateUserProfile, disconnectUser } =
+    useChatContext()
 
   async function handleSignInWithGoogle() {
     try {
@@ -39,10 +40,16 @@ export const AuthContextProvider = ({ children }: Children) => {
 
       const { user } = await auth().signInWithCredential(googleCredential)
 
-      setToken(idToken)
-      setUserInfo(user)
-      connectUserInChat(user.uid)
       setIsUserLoading(false)
+
+      if (user && idToken) {
+        setToken(idToken)
+        setUserInfo(user)
+        await connectUserInChat(user.uid)
+        if (user.displayName && user.photoURL) {
+          await updateUserProfile(user.displayName, user.photoURL)
+        }
+      }
     } catch (error) {
       console.log(`ERROR => ${error}`)
     }
@@ -54,14 +61,15 @@ export const AuthContextProvider = ({ children }: Children) => {
       await auth().signOut()
       setUserInfo({} as User)
       setToken(null)
+      disconnectUser()
     } catch (error) {
       console.log(error)
     }
   }
 
-  function signIn() {
+  async function signIn() {
     setIsUserLoading(true)
-    handleSignInWithGoogle()
+    await handleSignInWithGoogle()
   }
 
   function signOut() {

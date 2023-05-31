@@ -3,11 +3,13 @@ import { createContext, useState } from 'react'
 import { Children } from '@@types/Children'
 import { sb } from '@src/config/sendbird'
 
-import { User } from '@sendbird/chat'
+import { User, UserUpdateParams } from '@sendbird/chat'
 
 type ChatDataProps = {
   userCred: User
-  connectUserInChat: (userId: string) => void
+  connectUserInChat: (userId: string) => Promise<void>
+  updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
+  disconnectUser: () => void
 }
 
 export const ChatContext = createContext({} as ChatDataProps)
@@ -26,8 +28,23 @@ export const ChatContextProvider = ({ children }: Children) => {
     }
   }
 
+  async function disconnectUser() {
+    await sb.disconnect()
+  }
+
+  async function updateUserProfile(nickname: string, profileUrl: string) {
+    const params: UserUpdateParams = {
+      nickname,
+      profileUrl,
+    }
+
+    await sb.updateCurrentUserInfo(params)
+  }
+
   return (
-    <ChatContext.Provider value={{ userCred, connectUserInChat }}>
+    <ChatContext.Provider
+      value={{ userCred, connectUserInChat, updateUserProfile, disconnectUser }}
+    >
       {children}
     </ChatContext.Provider>
   )
