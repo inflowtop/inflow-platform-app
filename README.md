@@ -1,5 +1,7 @@
 # inflow-platform-app
 
+## Mover o contexto de chat para as rotas do proprio chat
+
 ## Config
 
 - [x] typescript, map path

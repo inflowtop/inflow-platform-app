@@ -11,7 +11,6 @@ import { StatusBar } from 'expo-status-bar'
 
 import { Loading } from '@components/common'
 import { AuthContextProvider } from '@contexts/AuthContext'
-import { ChatContextProvider } from '@contexts/ChatContext'
 import { Routes } from '@src/routes'
 
 export default function App() {
@@ -29,11 +28,9 @@ export default function App() {
     <SafeAreaProvider>
       <View className="flex-1">
         <StatusBar style="auto" translucent backgroundColor="transparent" />
-        <ChatContextProvider>
-          <AuthContextProvider>
-            <Routes />
-          </AuthContextProvider>
-        </ChatContextProvider>
+        <AuthContextProvider>
+          <Routes />
+        </AuthContextProvider>
       </View>
     </SafeAreaProvider>
   )
