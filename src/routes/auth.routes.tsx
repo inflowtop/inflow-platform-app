@@ -2,7 +2,7 @@ import { Login } from '@screens/Login'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const { Navigator, Screen } = createNativeStackNavigator()
+const { Screen, Navigator } = createNativeStackNavigator()
 
 export const AuthRoutes = () => {
   return (

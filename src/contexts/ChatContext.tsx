@@ -8,6 +8,10 @@ import {
   User,
   UserUpdateParams,
 } from '@sendbird/chat'
+import {
+  GroupChannel,
+  GroupChannelCreateParams,
+} from '@sendbird/chat/groupChannel'
 
 type ChatDataProps = {
   userCred: User
@@ -15,6 +19,7 @@ type ChatDataProps = {
   updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
   disconnectUser: () => void
   usersInChat: User[]
+  createOneToOneChannel: (userId: string, friendId: string) => void
 }
 
 export const ChatContext = createContext({} as ChatDataProps)
@@ -23,13 +28,25 @@ export const ChatContextProvider = ({ children }: Children) => {
   const [userCred, setUserCred] = useState({} as User)
   const [usersInChat, setUsersInChat] = useState<User[]>([])
 
+  async function createOneToOneChannel(
+    userId: string,
+    friendId: string,
+  ): Promise<GroupChannel> {
+    const params: GroupChannelCreateParams = {
+      invitedUserIds: [userId, friendId],
+      isDistinct: true,
+    }
+
+    return sb.groupChannel.createChannel(params)
+  }
+
   async function getActiveUsers() {
     const queryParams: ApplicationUserListQueryParams = {
       limit: 20,
     }
     const query = sb.createApplicationUserListQuery(queryParams)
 
-    return await query.next()
+    return query.next()
   }
 
   async function connectUserInChat(userId: string) {
@@ -67,6 +84,7 @@ export const ChatContextProvider = ({ children }: Children) => {
         updateUserProfile,
         disconnectUser,
         usersInChat,
+        createOneToOneChannel,
       }}
     >
       {children}

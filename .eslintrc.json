@@ -7,6 +7,7 @@
   ],
   "rules": {
     "camelcase": "off",
+    "jsx-a11y/alt-text": "off",
     "import-helpers/order-imports": [
       "warn",
       {

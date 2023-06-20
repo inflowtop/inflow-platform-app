@@ -8,8 +8,6 @@ import { useChatContext } from '@hooks/useChatInfo'
 export const ChatHome = () => {
   const { usersInChat } = useChatContext()
 
-  console.log(usersInChat)
-
   if (usersInChat.length < 1) {
     return <Loading />
   }

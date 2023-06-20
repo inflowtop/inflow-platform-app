@@ -4,6 +4,7 @@ export declare global {
       Home: undefined
       Chat: undefined
       Login: undefined
+      Channel: undefined
     }
   }
 }

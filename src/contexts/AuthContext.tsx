@@ -26,7 +26,8 @@ export const AuthContextProvider = ({ children }: Children) => {
   const [userInfo, setUserInfo] = useState<User>({} as User)
   const [isUserLoading, setIsUserLoading] = useState(false)
 
-  const { connectUserInChat, disconnectUser } = useChatContext()
+  const { connectUserInChat, disconnectUser, updateUserProfile } =
+    useChatContext()
 
   async function handleSignInWithGoogle() {
     try {
@@ -45,9 +46,9 @@ export const AuthContextProvider = ({ children }: Children) => {
         setToken(idToken)
         setUserInfo(user)
         await connectUserInChat(user.uid)
-        // if (user.displayName && user.photoURL) {
-        //   await updateUserProfile(user.displayName, user.photoURL)
-        // }
+        if (user.displayName && user.photoURL) {
+          await updateUserProfile(user.displayName, user.photoURL)
+        }
       }
     } catch (error) {
       console.log(`Login error => ${error}`)

@@ -8,7 +8,7 @@ export const ButtonGoBack = () => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={() => goBack()}>
-      <CaretLeft size={28} weight="bold" />
+      <CaretLeft size={24} weight="bold" />
     </TouchableOpacity>
   )
 }
