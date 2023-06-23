@@ -74,6 +74,9 @@ export const ChatContextProvider = ({ children }: Children) => {
     const user = await sb.updateCurrentUserInfo(params)
 
     setUserCred(user)
+
+    const users = await getActiveUsers()
+    setUsersInChat(users)
   }
 
   return (

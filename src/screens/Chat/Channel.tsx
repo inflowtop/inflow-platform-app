@@ -4,15 +4,24 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header } from '@components/Chat/Header'
 import { SendButton } from '@components/Chat/SendButton'
+import { groupChannel } from '@src/config/groupChannel'
+import { sb } from '@src/config/sendbird'
+import { ChatHandlerMessage } from '@src/utils/chatHandleMessage'
+
 
 export const Channel = () => {
   const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState<string[]>([])
+  const chatHandler = new ChatHandlerMessage(sb, groupChannel)
+
 
   function handleSetMessage(text: string) {
     setMessage(text)
   }
 
   function sendMessage() {
+    chatHandler.sendMessage(message)
+    setMessages([...messages, message])
     setMessage('')
   }
 
@@ -20,7 +29,9 @@ export const Channel = () => {
     <SafeAreaView className="flex-1">
       <Header />
       <View className="flex-1 bg-gray-300 px-4">
-        <Text>Messages...</Text>
+        {messages.map((msg) => (
+          <Text key={msg}>{msg}</Text>
+        ))}
       </View>
       <View className="flex-row items-center bg-gray-200 p-2">
         <TextInput

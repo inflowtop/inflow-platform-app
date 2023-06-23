@@ -10,7 +10,7 @@ export const Routes = () => {
 
   return (
     <NavigationContainer>
-      {!token ? <AuthRoutes /> : <AppRoutes />}
+      <AppRoutes />
     </NavigationContainer>
   )
 }

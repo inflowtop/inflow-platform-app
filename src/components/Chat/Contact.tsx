@@ -11,6 +11,10 @@ import { useNavigation } from '@react-navigation/native'
 import { User } from '@sendbird/chat'
 import { Circle } from 'phosphor-react-native'
 
+import {
+  GroupChannel
+} from '@sendbird/chat/groupChannel'
+
 type ContactProps = {
   user: User
   status?: 'ONLINE' | 'OFFLINE'
@@ -19,13 +23,17 @@ type ContactProps = {
 const BulletIndicator = styled(Circle)
 
 export const Contact = ({ status, user }: ContactProps) => {
-  const { createOneToOneChannel } = useChatContext()
+  const { createOneToOneChannel, userCred } = useChatContext()
   const { userInfo } = useAuth()
   const { navigate } = useNavigation()
 
   async function handlePushToChannel() {
-    const info = await createOneToOneChannel(userInfo.uid, user.userId)
-    console.log(info)
+    console.log(userInfo.uid, user.userId)
+    try {
+      await createOneToOneChannel(userCred.userId, user.userId)
+    } catch (err) {
+      console.error(err)
+    }
 
     navigate('Channel')
   }

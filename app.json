@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "inflow-platform-app",
-    "slug": "inflow-platform-app",
+    "slug": "inflow",
     "scheme": "inflow-platform-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -33,7 +33,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "b62e6d1c-454f-41be-a79b-aafd14ae9d93"
+        "projectId": "f84be436-e4e8-4bf5-b650-4fa1f7505202"
       }
     },
     "plugins": [
@@ -41,6 +41,6 @@
       "@react-native-firebase/auth",
       "@react-native-google-signin/google-signin"
     ],
-    "owner": "inflowusa"
+    "owner": "diogines"
   }
 }

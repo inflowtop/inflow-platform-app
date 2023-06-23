@@ -14,11 +14,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "316116381091-7rd85r7sq0b3j3c57t8opmghch8c0i0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inflowusa.inflowplatformapp",
+            "certificate_hash": "06b698c53309312123c92e15a99f783536b4d759"
+          }
+        },
+        {
           "client_id": "316116381091-ifeb43ilu9q81k675k38c1d9so5gqln0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.inflowusa.inflowplatformapp",
             "certificate_hash": "09c4b72c219519fca27bf85bb7f272bc56929774"
+          }
+        },
+        {
+          "client_id": "316116381091-kuumj0u3bnsjq3euc1n0j09na2vh0icn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inflowusa.inflowplatformapp",
+            "certificate_hash": "387e7ce8707d682501bd44f10b79fd4f59aaa5fe"
           }
         },
         {
