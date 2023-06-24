@@ -8,9 +8,9 @@ import { useChatContext } from '@hooks/useChatInfo'
 export const ChatHome = () => {
   const { usersInChat } = useChatContext()
 
-  // if (usersInChat.length < 1) {
-  //   return <Loading />
-  // }
+  if (usersInChat.length < 1) {
+    return <Loading />
+  }
 
   return (
     <SafeAreaView className="flex-1">

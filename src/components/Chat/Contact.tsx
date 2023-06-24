@@ -2,42 +2,41 @@ import { Text, TouchableOpacity, View } from 'react-native'
 
 import { Image } from 'expo-image'
 
-import { useAuth } from '@hooks/useAuth'
+// import { useAuth } from '@hooks/useAuth'
 import { useChatContext } from '@hooks/useChatInfo'
 
 import { styled } from 'nativewind'
 
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { User } from '@sendbird/chat'
 import { Circle } from 'phosphor-react-native'
-
-import {
-  GroupChannel
-} from '@sendbird/chat/groupChannel'
 
 type ContactProps = {
   user: User
   status?: 'ONLINE' | 'OFFLINE'
 }
 
+type RootStackParamList = {
+  Channel: {
+    channelUrl: string
+  }
+}
+
 const BulletIndicator = styled(Circle)
 
 export const Contact = ({ status, user }: ContactProps) => {
   const { createOneToOneChannel, userCred } = useChatContext()
-  const { userInfo } = useAuth()
-  const { navigate } = useNavigation()
+  // const { userInfo } = useAuth()
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
   async function handlePushToChannel() {
-    console.log(userInfo.uid, user.userId)
     try {
-      await createOneToOneChannel(userCred.userId, user.userId)
+      const channel = await createOneToOneChannel(userCred.userId, user.userId)
+      navigation.navigate('Channel', { channelUrl: channel.url })
     } catch (err) {
       console.error(err)
     }
-
-    navigate('Channel')
   }
-
   return (
     <TouchableOpacity
       activeOpacity={0.5}
