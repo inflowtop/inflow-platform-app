@@ -12,6 +12,7 @@ import {
   UserMessage,
   UserMessageCreateParams,
   BaseMessage,
+  FileMessage,
 } from '@sendbird/chat/message'
 
 export const Channel = () => {
@@ -37,6 +38,33 @@ export const Channel = () => {
             setMessages((prevMessages) => [...prevMessages, ...loadedMessages])
           })
         }
+
+        // Add a message collection handler to listen for new messages
+        const eventHandler = {
+          onChannelUpdated: (context: any, channel: GroupChannel) => {},
+          onChannelDeleted: (context: any, channelUrl: string) => {},
+          onMessagesAdded: (
+            context: any,
+            channel: GroupChannel,
+            messages: BaseMessage[],
+          ) => {
+            // update the state with the new messages
+            setMessages((prevMessages) => [...prevMessages, ...messages])
+          },
+          onMessagesUpdated: (
+            context: any,
+            channel: GroupChannel,
+            messages: BaseMessage[],
+          ) => {},
+          onMessagesDeleted: (
+            context: any,
+            channel: GroupChannel,
+            messageIds: number[],
+            messages: BaseMessage[],
+          ) => {},
+          onHugeGapDetected: () => {},
+        }
+        messageCollection.setMessageCollectionHandler(eventHandler)
       })
       .catch((error) => {
         console.error(error)
@@ -54,9 +82,11 @@ export const Channel = () => {
     }
     channel
       .sendUserMessage(params)
-      .onPending((message: UserMessage) => {})
-      .onFailed((err: Error, message: UserMessage) => {})
-      .onSucceeded((message: UserMessage) => {
+      .onPending(() => {})
+      .onFailed((err: Error, message: BaseMessage) => {
+        console.log(err, message)
+      })
+      .onSucceeded((message: BaseMessage) => {
         setMessages([...messages, message])
       })
     setMessage('')
@@ -66,10 +96,17 @@ export const Channel = () => {
     <SafeAreaView className="flex-1">
       <Header />
       <View className="flex-1 bg-gray-300 px-4">
-        {messages.map((msg) => (
-          <Text key={msg.messageId}>{msg.message}</Text>
-        ))}
+        {messages.map((msg) => {
+          if (msg instanceof UserMessage) {
+            return <Text key={msg.messageId}>{msg.message}</Text>
+          } else if (msg instanceof FileMessage) {
+            return <Text key={msg.messageId}>{msg.url}</Text>
+          } else {
+            return null
+          }
+        })}
       </View>
+
       <View className="flex-row items-center bg-gray-200 p-2">
         <TextInput
           className="flex-1 rounded bg-white px-4 py-2 text-lg"
