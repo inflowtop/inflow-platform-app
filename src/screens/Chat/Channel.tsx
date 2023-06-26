@@ -28,20 +28,22 @@ export const Channel = () => {
   const [channel, setChannel] = useState<GroupChannel>()
 
   useEffect(() => {
-    sb.groupChannel
-      .getChannel(channelUrl)
-      .then((groupChannel) => {
+    async function loadPreviousMessages() {
+      try {
+        const groupChannel = await sb.groupChannel.getChannel(channelUrl)
         setChannel(groupChannel)
-        const messageCollection = new MessageCollection()
+        console.log(groupChannel)
+        const messageCollection = new MessageCollection(groupChannel)
         if (messageCollection.hasPrevious) {
-          messageCollection.loadPrevious().then((loadedMessages) => {
-            setMessages((prevMessages) => [...prevMessages, ...loadedMessages])
-          })
+          const loadedMessages = await messageCollection.loadPrevious()
+          setMessages((prevMessages) => [...prevMessages, ...loadedMessages])
         }
 
         // Add a message collection handler to listen for new messages
         const eventHandler = {
-          onChannelUpdated: (context: any, channel: GroupChannel) => {},
+          onChannelUpdated: (context: any, channel: GroupChannel) => {
+            console.log(channel)
+          },
           onChannelDeleted: (context: any, channelUrl: string) => {},
           onMessagesAdded: (
             context: any,
@@ -49,13 +51,16 @@ export const Channel = () => {
             messages: BaseMessage[],
           ) => {
             // update the state with the new messages
+            console.log(messages)
             setMessages((prevMessages) => [...prevMessages, ...messages])
           },
           onMessagesUpdated: (
             context: any,
             channel: GroupChannel,
             messages: BaseMessage[],
-          ) => {},
+          ) => {
+            console.log(messages)
+          },
           onMessagesDeleted: (
             context: any,
             channel: GroupChannel,
@@ -65,11 +70,13 @@ export const Channel = () => {
           onHugeGapDetected: () => {},
         }
         messageCollection.setMessageCollectionHandler(eventHandler)
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error)
-      })
-  }, [channelUrl])
+      }
+    }
+
+    loadPreviousMessages()
+  }, [channelUrl, channel])
 
   function handleSetMessage(text: string) {
     setMessage(text)
@@ -107,7 +114,10 @@ export const Channel = () => {
         })}
       </View>
 
-      <View className="flex-row items-center bg-gray-200 p-2">
+      <View
+        key={messages.length}
+        className="flex-row items-center bg-gray-200 p-2"
+      >
         <TextInput
           className="flex-1 rounded bg-white px-4 py-2 text-lg"
           onChangeText={handleSetMessage}
