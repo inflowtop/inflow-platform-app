@@ -7,7 +7,10 @@ import { SendButton } from '@components/Chat/SendButton'
 import { sb } from '@src/config/sendbird'
 
 import { useRoute } from '@react-navigation/native'
-import { GroupChannel, MessageCollection } from '@sendbird/chat/groupChannel'
+import {
+  GroupChannel,
+  MessageCollectionInitHandler,
+} from '@sendbird/chat/groupChannel'
 import {
   UserMessage,
   UserMessageCreateParams,
@@ -32,44 +35,41 @@ export const Channel = () => {
       try {
         const groupChannel = await sb.groupChannel.getChannel(channelUrl)
         setChannel(groupChannel)
-        console.log(groupChannel)
-        const messageCollection = new MessageCollection(groupChannel)
+
+        const messageCollection = groupChannel.createMessageCollection()
+
         if (messageCollection.hasPrevious) {
           const loadedMessages = await messageCollection.loadPrevious()
-          setMessages((prevMessages) => [...prevMessages, ...loadedMessages])
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            ...loadedMessages.filter(
+              (newMessage) =>
+                !prevMessages.find(
+                  (msg) => msg.messageId === newMessage.messageId,
+                ),
+            ),
+          ])
         }
 
         // Add a message collection handler to listen for new messages
-        const eventHandler = {
-          onChannelUpdated: (context: any, channel: GroupChannel) => {
-            console.log(channel)
-          },
-          onChannelDeleted: (context: any, channelUrl: string) => {},
-          onMessagesAdded: (
-            context: any,
-            channel: GroupChannel,
-            messages: BaseMessage[],
-          ) => {
-            // update the state with the new messages
-            console.log(messages)
-            setMessages((prevMessages) => [...prevMessages, ...messages])
-          },
-          onMessagesUpdated: (
-            context: any,
-            channel: GroupChannel,
-            messages: BaseMessage[],
-          ) => {
-            console.log(messages)
-          },
-          onMessagesDeleted: (
-            context: any,
-            channel: GroupChannel,
-            messageIds: number[],
-            messages: BaseMessage[],
-          ) => {},
-          onHugeGapDetected: () => {},
-        }
-        messageCollection.setMessageCollectionHandler(eventHandler)
+        // const messageCollectionHandler: MessageCollectionInitHandler = {
+        //   onMessageReceived: (channel: GroupChannel, messages: BaseMessage) => {
+        //     messages.map((message) => dispatch(addMessage(message)))
+        //     setMessages((prevMessages) => [...prevMessages, ...messages])
+        //   },
+        //   onMessagesUpdated: (_, channel, messages) => {
+        //     messages.map((message) => dispatch(updateMessage(message)))
+        //   },
+        //   onMessagesDeleted: (_, channel, messages) => {
+        //     messages.map((message) =>
+        //       dispatch(deleteMessage(message.messageId)),
+        //     )
+        //   },
+        //   onChannelUpdated: () => {},
+        //   onChannelDeleted: () => {},
+        //   onHugeGapDetected: () => {},
+        // }
+        // messageCollection.setMessageCollectionHandler(messageCollectionHandler)
       } catch (error) {
         console.error(error)
       }
