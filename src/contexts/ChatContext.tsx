@@ -19,7 +19,10 @@ type ChatDataProps = {
   updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
   disconnectUser: () => void
   usersInChat: User[]
-  createOneToOneChannel: (userId: string, friendId: string) => void
+  createOneToOneChannel: (
+    userId: string,
+    friendId: string,
+  ) => Promise<GroupChannel>
 }
 
 export const ChatContext = createContext({} as ChatDataProps)

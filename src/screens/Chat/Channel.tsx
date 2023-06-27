@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { ScrollView, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { BallonMessage } from '@components/Chat/BallonMessage'
 import { Header } from '@components/Chat/Header'
 import { SendButton } from '@components/Chat/SendButton'
 import { sb } from '@src/config/sendbird'
@@ -17,7 +18,9 @@ import {
 
 export const Channel = () => {
   const [message, setMessage] = useState('')
+  // const [draftMessage, setDraftMessage] = useState('')
   const [messages, setMessages] = useState<BaseMessage[]>([])
+
   type ChannelRouteParams = {
     channelUrl: string
   }
@@ -33,13 +36,12 @@ export const Channel = () => {
         const groupChannel = await sb.groupChannel.getChannel(channelUrl)
         setChannel(groupChannel)
         console.log(groupChannel)
-        const messageCollection = new MessageCollection(groupChannel)
+        const messageCollection = new MessageCollection()
         if (messageCollection.hasPrevious) {
           const loadedMessages = await messageCollection.loadPrevious()
           setMessages((prevMessages) => [...prevMessages, ...loadedMessages])
         }
 
-        // Add a message collection handler to listen for new messages
         const eventHandler = {
           onChannelUpdated: (context: any, channel: GroupChannel) => {
             console.log(channel)
@@ -50,7 +52,6 @@ export const Channel = () => {
             channel: GroupChannel,
             messages: BaseMessage[],
           ) => {
-            // update the state with the new messages
             console.log(messages)
             setMessages((prevMessages) => [...prevMessages, ...messages])
           },
@@ -82,7 +83,7 @@ export const Channel = () => {
     setMessage(text)
   }
 
-  function sendMessage() {
+  function handleSendMessage() {
     if (!channel) return
     const params: UserMessageCreateParams = {
       message,
@@ -101,18 +102,35 @@ export const Channel = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Header />
-      <View className="flex-1 bg-gray-300 px-4">
+      <Header userName={channel?.members[1].nickname || 'Patrick'} />
+
+      {/* <FlatList
+        data={message}
+        inverted
+        renderItem={({ msg }) => {
+          if (msg instanceof UserMessage) {
+            console.log(msg.sender)
+            return <BallonMessage key={msg.messageId} message={msg.message} />
+          } else if (msg instanceof FileMessage) {
+            return <BallonMessage key={msg.messageId} message={msg.url} />
+          } else {
+            return null
+          }
+        }}
+      /> */}
+
+      <ScrollView className="bg-zinc-300 px-4 pt-2 last:pb-2">
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
-            return <Text key={msg.messageId}>{msg.message}</Text>
+            console.log(msg)
+            return <BallonMessage key={msg.messageId} message={msg.message} />
           } else if (msg instanceof FileMessage) {
-            return <Text key={msg.messageId}>{msg.url}</Text>
+            return <BallonMessage key={msg.messageId} message={msg.url} />
           } else {
             return null
           }
         })}
-      </View>
+      </ScrollView>
 
       <View
         key={messages.length}
@@ -124,7 +142,7 @@ export const Channel = () => {
           value={message}
         />
         <SendButton
-          sendMessage={sendMessage}
+          sendMessage={handleSendMessage}
           noMessage={message.length === 0}
         />
       </View>

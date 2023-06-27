@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Contact, Search } from '@components/Chat'
@@ -17,11 +17,11 @@ export const ChatHome = () => {
       <Header buttonGoBack />
       <View className="px-6 py-3">
         <Search />
-        <View className="mt-8">
+        <ScrollView className="mb-4 mt-8">
           {usersInChat?.map((user) => (
             <Contact key={user.userId} user={user} />
           ))}
-        </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   )
