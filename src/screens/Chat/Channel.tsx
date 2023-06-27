@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { ScrollView, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { BallonMessage } from '@components/Chat/BallonMessage'
 import { Header } from '@components/Chat/Header'
 import { SendButton } from '@components/Chat/SendButton'
 import { sb } from '@src/config/sendbird'
 
 import { useRoute } from '@react-navigation/native'
-import {
-  GroupChannel,
-  MessageCollectionInitHandler,
-} from '@sendbird/chat/groupChannel'
+import { BaseChannel } from '@sendbird/chat/baseChannel'
+import { GroupChannel, GroupChannelHandler } from '@sendbird/chat/groupChannel'
 import {
   UserMessage,
   UserMessageCreateParams,
@@ -20,7 +19,9 @@ import {
 
 export const Channel = () => {
   const [message, setMessage] = useState('')
+  // const [draftMessage, setDraftMessage] = useState('')
   const [messages, setMessages] = useState<BaseMessage[]>([])
+
   type ChannelRouteParams = {
     channelUrl: string
   }
@@ -29,6 +30,7 @@ export const Channel = () => {
   const { channelUrl } = route.params as ChannelRouteParams
 
   const [channel, setChannel] = useState<GroupChannel>()
+  const UNIQUE_HANDLER_ID = 'UNIQUE_HANDLER_ID'
 
   useEffect(() => {
     async function loadPreviousMessages() {
@@ -51,25 +53,24 @@ export const Channel = () => {
           ])
         }
 
-        // Add a message collection handler to listen for new messages
-        // const messageCollectionHandler: MessageCollectionInitHandler = {
-        //   onMessageReceived: (channel: GroupChannel, messages: BaseMessage) => {
-        //     messages.map((message) => dispatch(addMessage(message)))
-        //     setMessages((prevMessages) => [...prevMessages, ...messages])
-        //   },
-        //   onMessagesUpdated: (_, channel, messages) => {
-        //     messages.map((message) => dispatch(updateMessage(message)))
-        //   },
-        //   onMessagesDeleted: (_, channel, messages) => {
-        //     messages.map((message) =>
-        //       dispatch(deleteMessage(message.messageId)),
-        //     )
-        //   },
-        //   onChannelUpdated: () => {},
-        //   onChannelDeleted: () => {},
-        //   onHugeGapDetected: () => {},
-        // }
-        // messageCollection.setMessageCollectionHandler(messageCollectionHandler)
+        const groupChannelHandler: GroupChannelHandler =
+          new GroupChannelHandler({
+            onMessageReceived: (channel: BaseChannel, message: BaseMessage) => {
+              setMessages((prevMessages) => [...prevMessages, message])
+            },
+            onMessageUpdated: (channel: BaseChannel, message: BaseMessage) => {
+              console.log(message)
+            },
+            onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
+            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
+            onUnreadMemberStatusUpdated: (channel: GroupChannel) => {},
+            onTypingStatusUpdated: (channel: GroupChannel) => {},
+          })
+
+        sb.groupChannel.addGroupChannelHandler(
+          UNIQUE_HANDLER_ID,
+          groupChannelHandler,
+        )
       } catch (error) {
         console.error(error)
       }
@@ -82,7 +83,7 @@ export const Channel = () => {
     setMessage(text)
   }
 
-  function sendMessage() {
+  function handleSendMessage() {
     if (!channel) return
     const params: UserMessageCreateParams = {
       message,
@@ -101,18 +102,19 @@ export const Channel = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Header />
-      <View className="flex-1 bg-gray-300 px-4">
+      <Header userName={channel?.members[1].nickname || 'Patrick'} />
+
+      <ScrollView className="bg-zinc-300 px-4 pt-2 last:pb-2">
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
-            return <Text key={msg.messageId}>{msg.message}</Text>
+            return <BallonMessage key={msg.messageId} message={msg.message} />
           } else if (msg instanceof FileMessage) {
-            return <Text key={msg.messageId}>{msg.url}</Text>
+            return <BallonMessage key={msg.messageId} message={msg.url} />
           } else {
             return null
           }
         })}
-      </View>
+      </ScrollView>
 
       <View
         key={messages.length}
@@ -124,7 +126,7 @@ export const Channel = () => {
           value={message}
         />
         <SendButton
-          sendMessage={sendMessage}
+          sendMessage={handleSendMessage}
           noMessage={message.length === 0}
         />
       </View>
