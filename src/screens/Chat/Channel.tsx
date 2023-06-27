@@ -8,12 +8,11 @@ import { SendButton } from '@components/Chat/SendButton'
 import { sb } from '@src/config/sendbird'
 
 import { useRoute } from '@react-navigation/native'
-import { GroupChannel, MessageCollection } from '@sendbird/chat/groupChannel'
+import { GroupChannel } from '@sendbird/chat/groupChannel'
 import {
   UserMessage,
   UserMessageCreateParams,
   BaseMessage,
-  FileMessage,
 } from '@sendbird/chat/message'
 
 export const Channel = () => {
@@ -35,42 +34,21 @@ export const Channel = () => {
       try {
         const groupChannel = await sb.groupChannel.getChannel(channelUrl)
         setChannel(groupChannel)
-        console.log(groupChannel)
-        const messageCollection = new MessageCollection()
+
+        const messageCollection = groupChannel.createMessageCollection()
+
         if (messageCollection.hasPrevious) {
           const loadedMessages = await messageCollection.loadPrevious()
-          setMessages((prevMessages) => [...prevMessages, ...loadedMessages])
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            ...loadedMessages.filter(
+              (newMessage) =>
+                !prevMessages.find(
+                  (msg) => msg.messageId === newMessage.messageId,
+                ),
+            ),
+          ])
         }
-
-        const eventHandler = {
-          onChannelUpdated: (context: any, channel: GroupChannel) => {
-            console.log(channel)
-          },
-          onChannelDeleted: (context: any, channelUrl: string) => {},
-          onMessagesAdded: (
-            context: any,
-            channel: GroupChannel,
-            messages: BaseMessage[],
-          ) => {
-            console.log(messages)
-            setMessages((prevMessages) => [...prevMessages, ...messages])
-          },
-          onMessagesUpdated: (
-            context: any,
-            channel: GroupChannel,
-            messages: BaseMessage[],
-          ) => {
-            console.log(messages)
-          },
-          onMessagesDeleted: (
-            context: any,
-            channel: GroupChannel,
-            messageIds: number[],
-            messages: BaseMessage[],
-          ) => {},
-          onHugeGapDetected: () => {},
-        }
-        messageCollection.setMessageCollectionHandler(eventHandler)
       } catch (error) {
         console.error(error)
       }
@@ -122,10 +100,13 @@ export const Channel = () => {
       <ScrollView className="bg-zinc-300 px-4 pt-2 last:pb-2">
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
-            console.log(msg)
-            return <BallonMessage key={msg.messageId} message={msg.message} />
-          } else if (msg instanceof FileMessage) {
-            return <BallonMessage key={msg.messageId} message={msg.url} />
+            return (
+              <BallonMessage
+                key={msg.messageId}
+                data={msg}
+                isFriend={channel?.creator.nickname === msg.sender.nickname}
+              />
+            )
           } else {
             return null
           }
