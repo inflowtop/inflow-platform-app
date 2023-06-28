@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ScrollView, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -28,10 +28,13 @@ export const Channel = () => {
   }
 
   const route = useRoute()
+
   const { channelUrl } = route.params as ChannelRouteParams
 
   const [channel, setChannel] = useState<GroupChannel>()
   const UNIQUE_HANDLER_ID = 'UNIQUE_HANDLER_ID'
+
+  const scrollViewRef = useRef<ScrollView>(null)
 
   useEffect(() => {
     async function loadPreviousMessages() {
@@ -72,6 +75,8 @@ export const Channel = () => {
           UNIQUE_HANDLER_ID,
           groupChannelHandler,
         )
+
+        scrollViewRef.current?.scrollToEnd({ animated: false })
       } catch (error) {
         console.error(error)
       }
@@ -106,8 +111,7 @@ export const Channel = () => {
   return (
     <SafeAreaView className="flex-1 divide-y divide-gray-300/50">
       <Header userName={'Patrick'} />
-
-      <ScrollView className="px-4 pt-2 last:pb-2">
+      <ScrollView ref={scrollViewRef} className="px-4 pt-2">
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
             return (
@@ -122,7 +126,6 @@ export const Channel = () => {
           }
         })}
       </ScrollView>
-
       <View
         key={messages.length}
         className="mt-2 flex-row justify-between px-6 py-4"

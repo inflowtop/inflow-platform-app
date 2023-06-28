@@ -20,8 +20,6 @@ export const BallonMessage = ({ data, isSender }: BallonMessageProps) => {
       .toString()
       .padStart(2, '0')}`
 
-    console.log(new Date())
-
     return formattedDate
   }
 
@@ -30,9 +28,9 @@ export const BallonMessage = ({ data, isSender }: BallonMessageProps) => {
   return (
     <View className={`mb-2 ${isSender ? 'self-end' : 'self-start'}`}>
       <View
-        className={`flex-row rounded p-4 ${
+        className={`flex-row rounded-lg p-4 ${
           isSender
-            ? 'rounded-tr-none bg-blue-500 '
+            ? 'rounded-tr-none bg-blue-500'
             : 'rounded-tl-none bg-gray-500'
         }`}
       >

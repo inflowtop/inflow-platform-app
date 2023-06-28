@@ -13,7 +13,7 @@ export const ChatHome = () => {
   const filteredUsers =
     usersInChat.length > 0
       ? usersInChat.filter((user) =>
-          user.nickname.toLowerCase().includes(search.toLowerCase()),
+          user.nickname.toLowerCase().startsWith(search.toLowerCase()),
         )
       : []
 
@@ -26,7 +26,7 @@ export const ChatHome = () => {
       <Header buttonGoBack />
       <View className="px-6 py-3">
         <Search search={search} setSearch={setSearch} />
-        <ScrollView className="mb-4 mt-8">
+        <ScrollView showsVerticalScrollIndicator={false} className="mb-4 mt-8">
           {filteredUsers?.map((user) => {
             if (user.userId !== userCred.userId) {
               return <Contact key={user.userId} user={user} />
