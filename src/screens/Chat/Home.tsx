@@ -6,7 +6,7 @@ import { Header, Loading } from '@components/common'
 import { useChatContext } from '@hooks/useChatInfo'
 
 export const ChatHome = () => {
-  const { usersInChat } = useChatContext()
+  const { usersInChat, userCred } = useChatContext()
 
   if (usersInChat.length < 1) {
     return <Loading />
@@ -18,9 +18,13 @@ export const ChatHome = () => {
       <View className="px-6 py-3">
         <Search />
         <ScrollView className="mb-4 mt-8">
-          {usersInChat?.map((user) => (
-            <Contact key={user.userId} user={user} />
-          ))}
+          {usersInChat?.map((user) => {
+            if (user.userId !== userCred.userId) {
+              return <Contact key={user.userId} user={user} />
+            } else {
+              return null
+            }
+          })}
         </ScrollView>
       </View>
     </SafeAreaView>

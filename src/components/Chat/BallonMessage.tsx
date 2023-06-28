@@ -7,10 +7,10 @@ type MessageProps = {
 
 type BallonMessageProps = {
   data: MessageProps
-  isFriend: boolean
+  isSender: boolean
 }
 
-export const BallonMessage = ({ data, isFriend }: BallonMessageProps) => {
+export const BallonMessage = ({ data, isSender }: BallonMessageProps) => {
   function secondsToDate() {
     const date = new Date(data.createdAt)
     const hours = date.getHours()
@@ -21,14 +21,13 @@ export const BallonMessage = ({ data, isFriend }: BallonMessageProps) => {
   }
 
   const sendedAt = secondsToDate()
-  console.log(isFriend)
 
   return (
     <View
       className={`mb-2 flex-row rounded p-4 ${
-        isFriend
-          ? 'self-start rounded-tl-none bg-gray-500'
-          : 'self-end rounded-tr-none bg-blue-500'
+        isSender
+          ? 'self-end rounded-tr-none bg-blue-500 '
+          : 'self-start rounded-tl-none bg-gray-500'
       }`}
     >
       <Text className="text-gray-50">{data.message}</Text>

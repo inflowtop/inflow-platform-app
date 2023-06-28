@@ -5,10 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { BallonMessage } from '@components/Chat/BallonMessage'
 import { Header } from '@components/Chat/Header'
 import { SendButton } from '@components/Chat/SendButton'
+import { useChatContext } from '@hooks/useChatInfo'
 import { sb } from '@src/config/sendbird'
 
 import { useRoute } from '@react-navigation/native'
-import { GroupChannel } from '@sendbird/chat/groupChannel'
+import { BaseChannel } from '@sendbird/chat'
+import { GroupChannel, GroupChannelHandler } from '@sendbird/chat/groupChannel'
 import {
   UserMessage,
   UserMessageCreateParams,
@@ -16,8 +18,9 @@ import {
 } from '@sendbird/chat/message'
 
 export const Channel = () => {
+  const { userCred } = useChatContext()
+
   const [message, setMessage] = useState('')
-  // const [draftMessage, setDraftMessage] = useState('')
   const [messages, setMessages] = useState<BaseMessage[]>([])
 
   type ChannelRouteParams = {
@@ -28,6 +31,7 @@ export const Channel = () => {
   const { channelUrl } = route.params as ChannelRouteParams
 
   const [channel, setChannel] = useState<GroupChannel>()
+  const UNIQUE_HANDLER_ID = 'UNIQUE_HANDLER_ID'
 
   useEffect(() => {
     async function loadPreviousMessages() {
@@ -49,6 +53,25 @@ export const Channel = () => {
             ),
           ])
         }
+
+        const groupChannelHandler: GroupChannelHandler =
+          new GroupChannelHandler({
+            onMessageReceived: (channel: BaseChannel, message: BaseMessage) => {
+              setMessages((prevMessages) => [...prevMessages, message])
+            },
+            onMessageUpdated: (channel: BaseChannel, message: BaseMessage) => {
+              console.log(message)
+            },
+            onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
+            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
+            onUnreadMemberStatusUpdated: (channel: GroupChannel) => {},
+            onTypingStatusUpdated: (channel: GroupChannel) => {},
+          })
+
+        sb.groupChannel.addGroupChannelHandler(
+          UNIQUE_HANDLER_ID,
+          groupChannelHandler,
+        )
       } catch (error) {
         console.error(error)
       }
@@ -62,6 +85,8 @@ export const Channel = () => {
   }
 
   function handleSendMessage() {
+    console.log(messages)
+
     if (!channel) return
     const params: UserMessageCreateParams = {
       message,
@@ -79,32 +104,17 @@ export const Channel = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1">
-      <Header userName={channel?.members[1].nickname || 'Patrick'} />
+    <SafeAreaView className="flex-1 divide-y divide-gray-300/50">
+      <Header userName={'Patrick'} />
 
-      {/* <FlatList
-        data={message}
-        inverted
-        renderItem={({ msg }) => {
-          if (msg instanceof UserMessage) {
-            console.log(msg.sender)
-            return <BallonMessage key={msg.messageId} message={msg.message} />
-          } else if (msg instanceof FileMessage) {
-            return <BallonMessage key={msg.messageId} message={msg.url} />
-          } else {
-            return null
-          }
-        }}
-      /> */}
-
-      <ScrollView className="bg-zinc-300 px-4 pt-2 last:pb-2">
+      <ScrollView className="px-4 pt-2 last:pb-2">
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
             return (
               <BallonMessage
                 key={msg.messageId}
                 data={msg}
-                isFriend={channel?.creator.nickname === msg.sender.nickname}
+                isSender={userCred.userId === msg.sender.userId}
               />
             )
           } else {
@@ -115,12 +125,13 @@ export const Channel = () => {
 
       <View
         key={messages.length}
-        className="flex-row items-center bg-gray-200 p-2"
+        className="flex-row justify-between px-6 py-4"
       >
         <TextInput
-          className="flex-1 rounded bg-white px-4 py-2 text-lg"
+          className="mr-2 flex-1"
           onChangeText={handleSetMessage}
           value={message}
+          placeholder="Mensagem..."
         />
         <SendButton
           sendMessage={handleSendMessage}
