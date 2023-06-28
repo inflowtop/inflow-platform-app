@@ -125,7 +125,7 @@ export const Channel = () => {
 
       <View
         key={messages.length}
-        className="flex-row justify-between px-6 py-4"
+        className="mt-2 flex-row justify-between px-6 py-4"
       >
         <TextInput
           className="mr-2 flex-1"

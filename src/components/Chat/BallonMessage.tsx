@@ -16,25 +16,35 @@ export const BallonMessage = ({ data, isSender }: BallonMessageProps) => {
     const hours = date.getHours()
     const minutes = date.getMinutes()
 
-    const formattedDate = `${hours}:${minutes}`
+    const formattedDate = `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}`
+
+    console.log(new Date())
+
     return formattedDate
   }
 
   const sendedAt = secondsToDate()
 
   return (
-    <View
-      className={`mb-2 flex-row rounded p-4 ${
-        isSender
-          ? 'self-end rounded-tr-none bg-blue-500 '
-          : 'self-start rounded-tl-none bg-gray-500'
-      }`}
-    >
-      <Text className="text-gray-50">{data.message}</Text>
-      <Text className="ml-2 mt-2 self-end text-[10px] text-gray-200/70">
+    <View className={`mb-2 ${isSender ? 'self-end' : 'self-start'}`}>
+      <View
+        className={`flex-row rounded p-4 ${
+          isSender
+            ? 'rounded-tr-none bg-blue-500 '
+            : 'rounded-tl-none bg-gray-500'
+        }`}
+      >
+        <Text className="text-gray-50">{data.message}</Text>
+      </View>
+      <Text
+        className={`ml-2 mt-1 text-[10px] text-gray-600 ${
+          isSender && 'self-end'
+        }`}
+      >
         {sendedAt}
       </Text>
-      {/* <Text>visto</Text> */}
     </View>
   )
 }
