@@ -28,13 +28,15 @@ export const BallonMessage = ({ data, isSender }: BallonMessageProps) => {
   return (
     <View className={`mb-2 ${isSender ? 'self-end' : 'self-start'}`}>
       <View
-        className={`flex-row rounded-lg p-4 ${
+        className={`flex-row rounded-lg px-4 py-3 ${
           isSender
             ? 'rounded-tr-none bg-blue-500'
-            : 'rounded-tl-none bg-gray-500'
+            : 'rounded-tl-none bg-gray-300'
         }`}
       >
-        <Text className="text-gray-50">{data.message}</Text>
+        <Text className={`${isSender ? 'text-gray-50' : 'text-gray-800'}`}>
+          {data.message}
+        </Text>
       </View>
       <Text
         className={`ml-2 mt-1 text-[10px] text-gray-600 ${

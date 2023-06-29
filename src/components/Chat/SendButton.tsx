@@ -15,6 +15,7 @@ const SendIcon = styled(CaretCircleRight)
 export const SendButton = ({ noMessage, sendMessage }: SendButtonProps) => {
   return (
     <TouchableOpacity
+      className="ml-1"
       activeOpacity={0.8}
       disabled={noMessage}
       onPress={sendMessage}
