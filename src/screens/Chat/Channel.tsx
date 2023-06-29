@@ -8,7 +8,7 @@ import { SendButton } from '@components/Chat/SendButton'
 import { useChatContext } from '@hooks/useChatInfo'
 import { sb } from '@src/config/sendbird'
 
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { BaseChannel } from '@sendbird/chat'
 import { GroupChannel, GroupChannelHandler } from '@sendbird/chat/groupChannel'
 import {
@@ -18,25 +18,32 @@ import {
 } from '@sendbird/chat/message'
 
 export const Channel = () => {
-  const { userCred } = useChatContext()
-
-  const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState<BaseMessage[]>([])
-
   type ChannelRouteParams = {
     channelUrl: string
   }
 
+  const { userCred } = useChatContext()
+  const navigation = useNavigation()
   const route = useRoute()
+
+  const [message, setMessage] = useState('')
+  const [messages, setMessages] = useState<BaseMessage[]>([])
+  const [channel, setChannel] = useState<GroupChannel>()
+  const scrollViewRef = useRef<ScrollView>(null)
 
   const { channelUrl } = route.params as ChannelRouteParams
 
-  const [channel, setChannel] = useState<GroupChannel>()
   const UNIQUE_HANDLER_ID = 'UNIQUE_HANDLER_ID'
 
-  const scrollViewRef = useRef<ScrollView>(null)
-
   useEffect(() => {
+    const onFocus = () => {
+      if (!channel) return
+      channel.markAsRead()
+    }
+
+    const unsubscribe = navigation.addListener('focus', onFocus)
+
+    return unsubscribe
     async function loadPreviousMessages() {
       try {
         const groupChannel = await sb.groupChannel.getChannel(channelUrl)
@@ -62,13 +69,15 @@ export const Channel = () => {
             onMessageReceived: (channel: BaseChannel, message: BaseMessage) => {
               setMessages((prevMessages) => [...prevMessages, message])
             },
-            onMessageUpdated: (channel: BaseChannel, message: BaseMessage) => {
-              console.log(message)
+            onMessageUpdated: (
+              channel: BaseChannel,
+              message: BaseMessage,
+            ) => { },
+            onMessageDeleted: (channel: BaseChannel, messageId: number) => { },
+            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => { },
+            onUnreadMemberStatusUpdated: (channel: GroupChannel) => { 
+              console.log(channel.unreadMessageCount)
             },
-            onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
-            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
-            onUnreadMemberStatusUpdated: (channel: GroupChannel) => {},
-            onTypingStatusUpdated: (channel: GroupChannel) => {},
           })
 
         sb.groupChannel.addGroupChannelHandler(
@@ -83,27 +92,27 @@ export const Channel = () => {
     }
 
     loadPreviousMessages()
-  }, [channelUrl, channel])
+  }, [channelUrl, channel, navigation])
 
   function handleSetMessage(text: string) {
     setMessage(text)
+    if (channel) console.log(channel.startTyping())
   }
 
   function handleSendMessage() {
-    console.log(messages)
-
     if (!channel) return
     const params: UserMessageCreateParams = {
       message,
     }
     channel
       .sendUserMessage(params)
-      .onPending(() => {})
+      .onPending(() => { })
       .onFailed((err: Error, message: BaseMessage) => {
         console.log(err, message)
       })
       .onSucceeded((message: BaseMessage) => {
         setMessages([...messages, message])
+        channel.endTyping()
       })
     setMessage('')
   }
