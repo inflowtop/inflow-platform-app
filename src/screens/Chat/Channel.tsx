@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BallonMessage } from '@components/Chat/BallonMessage'
 import { Header } from '@components/Chat/Header'
+import { ImageUpload } from '@components/Chat/ImageUpload'
 import { SendButton } from '@components/Chat/SendButton'
 import { useChatContext } from '@hooks/useChatInfo'
 import { sb } from '@src/config/sendbird'
@@ -62,9 +63,10 @@ export const Channel = () => {
             onMessageReceived: (channel: BaseChannel, message: BaseMessage) => {
               setMessages((prevMessages) => [...prevMessages, message])
             },
-            onMessageUpdated: (channel: BaseChannel, message: BaseMessage) => {
-              console.log(message)
-            },
+            onMessageUpdated: (
+              channel: BaseChannel,
+              message: BaseMessage,
+            ) => {},
             onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
             onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
             onUnreadMemberStatusUpdated: (channel: GroupChannel) => {},
@@ -90,8 +92,6 @@ export const Channel = () => {
   }
 
   function handleSendMessage() {
-    console.log(messages)
-
     if (!channel) return
     const params: UserMessageCreateParams = {
       message,
@@ -110,7 +110,7 @@ export const Channel = () => {
 
   return (
     <SafeAreaView className="flex-1 divide-y divide-gray-300/50">
-      <Header userName={'Patrick'} />
+      <Header userName={channel?.members[1].nickname!} />
       <ScrollView ref={scrollViewRef} className="px-4 pt-2">
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
@@ -136,10 +136,13 @@ export const Channel = () => {
           value={message}
           placeholder="Mensagem..."
         />
-        <SendButton
-          sendMessage={handleSendMessage}
-          noMessage={message.length === 0}
-        />
+        <View className="flex-row items-center">
+          <ImageUpload />
+          <SendButton
+            sendMessage={handleSendMessage}
+            noMessage={message.length === 0}
+          />
+        </View>
       </View>
     </SafeAreaView>
   )
