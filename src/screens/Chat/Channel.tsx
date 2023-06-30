@@ -77,11 +77,15 @@ export const Channel = () => {
             onMessageUpdated: (
               channel: BaseChannel,
               message: BaseMessage,
-            ) => {},
-            onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
-            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
+            ) => { },
+            onMessageDeleted: (channel: BaseChannel, messageId: number) => { },
+            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => { },
             onUnreadMemberStatusUpdated: (channel: GroupChannel) => {
               console.log(channel.unreadMessageCount)
+            },
+            onTypingStatusUpdated: (channel: GroupChannel) => {
+              const typingMembers = channel.getTypingUsers()
+              setIsTyping(typingMembers.length > 0)
             },
           })
 
@@ -99,18 +103,20 @@ export const Channel = () => {
     loadPreviousMessages()
 
     return unsubscribe
-  }, [channelUrl, channel, navigation])
+  }, [channelUrl, channel, navigation, isTyping])
 
   function handleSetMessage(text: string) {
     setMessage(text)
     if (channel) {
       channel
         .startTyping()
-        .then(() => setIsTyping(true))
+        .then(() => {
+          setIsTyping(true)
+          console.log(isTyping)
+        })
         .catch((err) => console.log(err))
         .finally(() => setIsTyping(false))
     }
-    console.log(isTyping)
   }
 
   function handleSendMessage() {
@@ -120,7 +126,7 @@ export const Channel = () => {
     }
     channel
       .sendUserMessage(params)
-      .onPending(() => {})
+      .onPending(() => { })
       .onFailed((err: Error, message: BaseMessage) => {
         console.log(err, message)
       })
@@ -148,8 +154,8 @@ export const Channel = () => {
             return null
           }
         })}
-        {isTyping && <Typing />}
       </ScrollView>
+      {isTyping && <Typing />}
       <View
         key={messages.length}
         className="mt-2 flex-row justify-between px-6 py-4"
