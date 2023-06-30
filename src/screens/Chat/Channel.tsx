@@ -1,14 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import { ScrollView, TextInput, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import {
-  BallonMessage,
-  Header,
-  ImageUpload,
-  SendButton,
-  Typing,
-} from '@components/Chat'
+import { BallonMessage, Header, Typing } from '@components/Chat'
+import { SendMessage } from '@components/Chat/SendMessageArea'
 import { useChatContext } from '@hooks/useChatInfo'
 import { sb } from '@src/config/sendbird'
 
@@ -138,9 +133,12 @@ export const Channel = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 divide-y divide-gray-300/50">
+    <SafeAreaView className="flex-1">
       <Header userName={channel?.members[1].nickname!} />
-      <ScrollView ref={scrollViewRef} className="px-4 pt-2">
+      <ScrollView
+        ref={scrollViewRef}
+        className="border-b border-t border-gray-300/50 bg-gray-200 px-4 pt-2"
+      >
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
             return (
@@ -154,26 +152,13 @@ export const Channel = () => {
             return null
           }
         })}
+        {isTyping && <Typing />}
+        <View className="h-2 w-full" />
       </ScrollView>
-      {isTyping && <Typing />}
-      <View
-        key={messages.length}
-        className="mt-2 flex-row justify-between px-6 py-4"
-      >
-        <TextInput
-          className="mr-2 flex-1"
-          onChangeText={handleSetMessage}
-          value={message}
-          placeholder="Mensagem..."
-        />
-        <View className="flex-row items-center">
-          <ImageUpload />
-          <SendButton
-            sendMessage={handleSendMessage}
-            noMessage={message.length === 0}
-          />
-        </View>
-      </View>
+      <SendMessage.Root>
+        <SendMessage.Input handler={handleSetMessage} value={message} />
+        <SendMessage.Actions handler={handleSendMessage} message={message} />
+      </SendMessage.Root>
     </SafeAreaView>
   )
 }
