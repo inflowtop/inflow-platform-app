@@ -23,7 +23,7 @@ export const ChatHome = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Header buttonGoBack />
+      <Header />
       <View className="px-6 py-3">
         <Search search={search} setSearch={setSearch} />
         <ScrollView showsVerticalScrollIndicator={false} className="mb-4 mt-8">
