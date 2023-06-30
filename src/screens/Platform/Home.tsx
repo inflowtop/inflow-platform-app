@@ -9,18 +9,20 @@ import { useNavigation } from '@react-navigation/native'
 import { ChatCircleDots } from 'phosphor-react-native'
 
 export const Home = () => {
-  const { userInfo } = useAuth()
+  const { user } = useAuth()
   const { navigate } = useNavigation()
   const { connectUserInChat, updateUserProfile } = useChatContext()
 
-  if (!userInfo.photoURL) {
+  if (!user.profileImage) {
     ;<Loading />
   }
 
   const handleButtonPress = async () => {
-    await connectUserInChat('bbb')
+    await connectUserInChat(user.email)
 
-    await updateUserProfile('Patrick', 'url').then(() => navigate('Chat'))
+    await updateUserProfile(user.name, user.profileImage).then(() =>
+      navigate('Chat'),
+    )
   }
 
   return (

@@ -151,7 +151,13 @@ export const Channel = () => {
       </ScrollView>
       <SendMessage.Root>
         <SendMessage.Input handler={handleSetMessage} value={message} />
-        <SendMessage.Actions handler={handleSendMessage} message={message} />
+        <SendMessage.Actions>
+          <SendMessage.SendButton
+            sendMessage={handleSendMessage}
+            noMessage={message.length === 0}
+          />
+          <SendMessage.ImageUpload />
+        </SendMessage.Actions>
       </SendMessage.Root>
     </SafeAreaView>
   )
