@@ -19,7 +19,7 @@ type RootStackParamList = {
 
 export const Contact = ({ user }: ConnectionProps) => {
   const { createOneToOneChannel, userCred } = useChatContext()
-  // const { userInfo } = useAuth()
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>()
 
   async function handlePushToChannel() {
@@ -30,6 +30,7 @@ export const Contact = ({ user }: ConnectionProps) => {
       console.error(err)
     }
   }
+
   return (
     <TouchableOpacity
       activeOpacity={0.5}
