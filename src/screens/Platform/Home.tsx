@@ -20,9 +20,7 @@ export const Home = () => {
   const handleButtonPress = async () => {
     await connectUserInChat('bbb')
 
-    await updateUserProfile('PinguinCarioca', 'url').then(() =>
-      navigate('Chat'),
-    )
+    await updateUserProfile('Patrick', 'url').then(() => navigate('Chat'))
   }
 
   return (
