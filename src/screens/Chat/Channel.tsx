@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -37,56 +37,63 @@ export const Channel = () => {
 
   const UNIQUE_HANDLER_ID = 'UNIQUE_HANDLER_ID'
 
-  const updateReadReceipts = useCallback(() => {
-    if (!channel) return
-    const newReadReceipts: Record<string, boolean> = {}
-    messages.forEach((message) => {
-      const readStatus = channel.getReadStatus()
-      for (const memberId in readStatus) {
-        if (memberId !== sb.currentUser.userId) {
-          newReadReceipts[message.messageId] =
-            readStatus[memberId].readAt <= message.createdAt
-        }
-      }
-    })
-    setReadReceipts(newReadReceipts)
-  }, [channel, messages])
-
   useEffect(() => {
     async function loadPreviousMessages() {
       try {
         const groupChannel = await sb.groupChannel.getChannel(channelUrl)
         setChannel(groupChannel)
 
-        const messageCollection = groupChannel.createMessageCollection()
+        function updateReadReceipts() {
+          const newReadReceipts: Record<string, boolean> = {}
+          messages.forEach((message) => {
+            const readStatus = groupChannel.getReadStatus()
+            console.log('Read status:', readStatus)
+            console.log('Message created at:', message.createdAt)
+            newReadReceipts[message.messageId] = Object.entries(readStatus)
+              .filter(([userId]) => userId !== sb.currentUser.userId)
+              .every(([_, status]) => {
+                console.log('Read at:', status.readAt)
+                return status.readAt >= message.createdAt
+              })
+            console.log('New read receipts:', newReadReceipts)
+          })
+          setReadReceipts(newReadReceipts)
+        }
 
-        if (messageCollection.hasPrevious) {
-          const loadedMessages = await messageCollection.loadPrevious()
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            ...loadedMessages.filter(
-              (newMessage) =>
-                !prevMessages.find(
-                  (msg) => msg.messageId === newMessage.messageId,
-                ),
-            ),
-          ])
+        if (messages.length === 0) {
+          const messageCollection = groupChannel.createMessageCollection()
+
+          if (messageCollection.hasPrevious) {
+            const loadedMessages = await messageCollection.loadPrevious()
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              ...loadedMessages.filter(
+                (newMessage) =>
+                  !prevMessages.find(
+                    (msg) => msg.messageId === newMessage.messageId,
+                  ),
+              ),
+            ])
+
+            updateReadReceipts()
+          }
         }
 
         const groupChannelHandler: GroupChannelHandler =
           new GroupChannelHandler({
-            onMessageReceived: (channel: BaseChannel, message: BaseMessage) => {
+            onMessageReceived: async (
+              channel: BaseChannel,
+              message: BaseMessage,
+            ) => {
               setMessages((prevMessages) => [...prevMessages, message])
+              await groupChannel.markAsRead()
             },
-            onUnreadMemberStatusUpdated: (channel: GroupChannel) => { },
             onTypingStatusUpdated: (channel: GroupChannel) => {
               const typingMembers = channel.getTypingUsers()
               setIsTyping(typingMembers.length > 0)
             },
-            onChannelChanged: (channel) => {
-              if (channel instanceof GroupChannel) {
-                updateReadReceipts()
-              }
+            onChannelChanged: async (channel) => {
+              updateReadReceipts()
             },
           })
 
@@ -96,13 +103,14 @@ export const Channel = () => {
         )
 
         scrollViewRef.current?.scrollToEnd({ animated: false })
+
       } catch (error) {
         console.error(error)
       }
     }
 
     loadPreviousMessages()
-  }, [channelUrl, channel, navigation, isTyping, messages, updateReadReceipts])
+  }, [channelUrl, channel, navigation, isTyping, messages, readReceipts])
 
   function handleSetMessage(text: string) {
     setMessage(text)
@@ -129,7 +137,6 @@ export const Channel = () => {
         console.log(err, message)
       })
       .onSucceeded((message: BaseMessage) => {
-        channel.markAsRead()
         setMessages([...messages, message])
         channel.endTyping()
       })
