@@ -1,14 +1,17 @@
 import { useState } from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { View } from 'react-native'
 
 import { Image } from 'expo-image'
 
 import BrandLogo from '@assets/logo.png'
 import { Button } from '@components/common'
+import { LoginForm } from '@components/Form/Login'
 import { useAuth } from '@hooks/useAuth'
 
+import { At, Lock } from 'phosphor-react-native'
+
 export const Login = () => {
-  const { login } = useAuth()
+  const { login, isUserLoading } = useAuth()
 
   const [userPassword, setUserPassword] = useState('')
   const [userEmail, setUserEmail] = useState('')
@@ -58,36 +61,40 @@ export const Login = () => {
   }
 
   return (
-    <View className="flex-1 items-center justify-center space-y-4">
-      <Image source={BrandLogo} className="mb-6 h-16 w-56" />
-      <View className="w-full max-w-xs space-y-2">
-        <TextInput
-          className="rounded border border-gray-500 px-4 py-2 focus:border-blue-600"
-          placeholder="Email"
-          value={userEmail}
-          id="email"
-          onChangeText={(text: string) => setUserEmail(text)}
+    <View className="mx-auto max-w-xs flex-1 items-center justify-center space-y-4">
+      <LoginForm.TitleRoot>
+        <Image source={BrandLogo} className="mx-auto h-[69px] w-[222px]" />
+        <LoginForm.Title title="Login to your Account" />
+        <LoginForm.Subtitle
+          subtitle="Get started with our app, just create an account and enjoy the
+          experience."
         />
-        {emailError.isError ? (
-          <Text className="text-red-600">{emailError.message}</Text>
-        ) : null}
-        <TextInput
-          className="rounded border border-gray-500 px-4 py-2 focus:border-blue-600"
-          placeholder="Password"
-          value={userPassword}
-          id="password"
-          onChangeText={(text: string) => setUserPassword(text)}
-          secureTextEntry
-        />
-        {passwordError.isError ? (
-          <Text className="text-red-600">{passwordError.message}</Text>
-        ) : null}
-        <Button onPress={handleLogin}>Login</Button>
-      </View>
-      <Text className="text-center text-sm text-gray-500">
-        Não utilizamos nenhuma informação além {'\n'} do seu e-mail para criação
-        de sua conta.
-      </Text>
+      </LoginForm.TitleRoot>
+      <LoginForm.FormRoot>
+        <LoginForm.Field>
+          <LoginForm.Label label="Email" />
+          <LoginForm.Input
+            error={emailError}
+            icon={At}
+            name="Email"
+            value={userEmail}
+            onChange={setUserEmail}
+          />
+        </LoginForm.Field>
+        <LoginForm.Field>
+          <LoginForm.Label label="Password" />
+          <LoginForm.Input
+            error={passwordError}
+            icon={Lock}
+            name="Password"
+            value={userPassword}
+            onChange={setUserPassword}
+          />
+        </LoginForm.Field>
+        <Button onPress={handleLogin} isLoading={isUserLoading}>
+          Login
+        </Button>
+      </LoginForm.FormRoot>
     </View>
   )
 }

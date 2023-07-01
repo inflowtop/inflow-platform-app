@@ -17,7 +17,7 @@ type Props = {
 export const Button = ({ children, isLoading, icon, ...rest }: Props) => {
   return (
     <TouchableOpacity
-      className="w-full max-w-xs flex-row items-center justify-center space-x-2 rounded-md bg-blue-600 p-4"
+      className="w-full max-w-xs flex-row items-center justify-center space-x-2 rounded-md bg-blue-600 p-3"
       activeOpacity={0.8}
       {...rest}
     >

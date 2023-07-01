@@ -75,8 +75,10 @@ export const Channel = () => {
             ) => {},
             onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
             onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
-            onUnreadMemberStatusUpdated: (channel: GroupChannel) => {
-              console.log(channel.unreadMessageCount)
+            onUnreadMemberStatusUpdated: (channel: GroupChannel) => {},
+            onTypingStatusUpdated: (channel: GroupChannel) => {
+              const typingMembers = channel.getTypingUsers()
+              setIsTyping(typingMembers.length > 0)
             },
           })
 
@@ -94,18 +96,19 @@ export const Channel = () => {
     loadPreviousMessages()
 
     return unsubscribe
-  }, [channelUrl, channel, navigation])
+  }, [channelUrl, channel, navigation, isTyping])
 
   function handleSetMessage(text: string) {
     setMessage(text)
     if (channel) {
       channel
         .startTyping()
-        .then(() => setIsTyping(true))
+        .then(() => {
+          setIsTyping(true)
+        })
         .catch((err) => console.log(err))
         .finally(() => setIsTyping(false))
     }
-    console.log(isTyping)
   }
 
   function handleSendMessage() {
@@ -128,10 +131,15 @@ export const Channel = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Header userName={channel?.members[1].nickname!} />
+      <Header
+        data={{
+          userName: channel?.members[1].nickname!,
+          profileImage: channel?.members[1].profileUrl!,
+        }}
+      />
       <ScrollView
         ref={scrollViewRef}
-        className="border-b border-t border-gray-300/50 bg-gray-200 px-4 pt-2"
+        className="border-b border-t border-gray-300/50 bg-gray-300 px-4 pt-2"
       >
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
@@ -152,11 +160,11 @@ export const Channel = () => {
       <SendMessage.Root>
         <SendMessage.Input handler={handleSetMessage} value={message} />
         <SendMessage.Actions>
+          <SendMessage.ImageUpload />
           <SendMessage.SendButton
             sendMessage={handleSendMessage}
             noMessage={message.length === 0}
           />
-          <SendMessage.ImageUpload />
         </SendMessage.Actions>
       </SendMessage.Root>
     </SafeAreaView>
