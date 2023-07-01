@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "inflow-platform-app",
-    "slug": "inflow-platform-app",
+    "slug": "inflow",
     "scheme": "inflow-platform-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,22 +17,36 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.patrickts.inflowplatformapp"
+      "bundleIdentifier": "com.inflowusa.inflowplatformapp",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.patrickts.inflowplatformapp"
+      "package": "com.inflowusa.inflowplatformapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "7e82718d-43ef-4a7a-ac93-d8d6ae5a81d4"
+        "projectId": "f84be436-e4e8-4bf5-b650-4fa1f7505202"
       }
-    }
+    },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+    "owner": "diogines"
   }
 }

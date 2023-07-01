@@ -5,3 +5,4 @@ assets
 img
 image
 public
+*.d.ts

@@ -1,60 +1,46 @@
 {
-  "env": {
-    "es2021": true,
-    "node": true
-  },
   "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "prettier"
+    "@rocketseat/eslint-config/react"
   ],
-  "overrides": [],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
   "plugins": [
-    "react",
-    "@typescript-eslint",
-    "react-hooks",
-    "import",
-    "prettier",
     "eslint-plugin-import-helpers"
   ],
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "rules": {
-    "react/react-in-jsx-scope": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
-    "indent": ["error", 2],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"],
+    "camelcase": "off",
+    "jsx-a11y/alt-text": "off",
     "import-helpers/order-imports": [
       "warn",
       {
         "newlinesBetween": "always",
         "groups": [
-          ["/^react/", "/^react-native/"],
-          ["/^@expo/", "/^expo/"],
-          "/^@screens/",
-          "/^@components/",
-          "module",
-          ["parent", "sibling", "index"],
-          "/^styles/",
-          "/^@assets/"
+          [
+            "/^react/",
+            "/^react-native/"
+          ],
+          [
+            "/^@expo/",
+            "/^expo/"
+          ],
+          [
+            "/^@src/",
+            "/^@screens/",
+            "/^@components/",
+            "/^@contexts/",
+            "/^@hooks/",
+            "/^@assets/",
+            "/^@@types/"
+          ],
+          "/^nativewind/",
+          [
+            "parent",
+            "sibling",
+            "index"
+          ]
         ],
-        "alphabetize": { "order": "asc", "ignoreCase": true }
+        "alphabetize": {
+          "order": "asc",
+          "ignoreCase": true
+        }
       }
     ]
   }

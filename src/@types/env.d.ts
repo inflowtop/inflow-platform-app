@@ -1,7 +1,5 @@
-declare module "@env" {
-  export const GOOGLE_EXPO_CLIENT_ID: string;
-  export const GOOGLE_WEB_CLIENT_ID: string;
-  export const GOOGLE_ANDROID_CLIENT_ID: string;
-  export const GOOGLE_IOS_CLIENT_ID: string;
-  export const GOOGLE_API_URL: string;
+declare module '@env' {
+  export const FIREBASE_ANDROID_CLIENT: string
+  export const SENDBIRD_APP_ID: string
+  export const SENDBIRD_API_TOKEN: string
 }

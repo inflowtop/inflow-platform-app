@@ -17,3 +17,7 @@ web-build/
 .metro-health-check*
 
 .env
+
+channel.json
+message.json
+AuthGoogleContext.tsx
