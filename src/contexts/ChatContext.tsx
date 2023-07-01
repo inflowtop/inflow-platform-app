@@ -1,6 +1,7 @@
 import { createContext, useState } from 'react'
 
 import { Children } from '@@types/Children'
+import { api } from '@src/config/axios'
 import { sb } from '@src/config/sendbird'
 
 import {
@@ -13,9 +14,15 @@ import {
   GroupChannelCreateParams,
 } from '@sendbird/chat/groupChannel'
 
+type ProfessionalsInfo = {
+  isProfessional: boolean
+  professionalId: string
+}
+
 type ChatDataProps = {
   userCred: User
   usersInChat: User[]
+  professionals: ProfessionalsInfo[]
   connectUserInChat: (userId: string) => Promise<void>
   updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
   disconnectUser: () => void
@@ -30,6 +37,7 @@ export const ChatContext = createContext({} as ChatDataProps)
 export const ChatContextProvider = ({ children }: Children) => {
   const [userCred, setUserCred] = useState({} as User)
   const [usersInChat, setUsersInChat] = useState<User[]>([])
+  const [professionals, setProfessionals] = useState<ProfessionalsInfo[]>([])
 
   async function createOneToOneChannel(
     userId: string,
@@ -41,6 +49,14 @@ export const ChatContextProvider = ({ children }: Children) => {
     }
 
     return sb.groupChannel.createChannel(params)
+  }
+
+  async function getProfessionals() {
+    const { data } = await api.get<ProfessionalsInfo[]>(
+      '/api/get-professionals',
+    )
+
+    return data
   }
 
   async function getActiveUsers() {
@@ -56,6 +72,8 @@ export const ChatContextProvider = ({ children }: Children) => {
     try {
       await sb.connect(userId)
       const users = await getActiveUsers()
+      const professionals = await getProfessionals()
+      setProfessionals(professionals)
       setUsersInChat(users)
     } catch (err) {
       if (err) {
@@ -86,10 +104,11 @@ export const ChatContextProvider = ({ children }: Children) => {
     <ChatContext.Provider
       value={{
         userCred,
+        usersInChat,
+        professionals,
         connectUserInChat,
         updateUserProfile,
         disconnectUser,
-        usersInChat,
         createOneToOneChannel,
       }}
     >
