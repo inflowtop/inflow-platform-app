@@ -12,15 +12,20 @@ type HeaderProps = {
 }
 
 export const Header = ({ buttonGoBack }: HeaderProps) => {
-  const { userInfo } = useAuth()
+  const { user } = useAuth()
 
   return (
     <View className="w-full flex-row items-center justify-between px-6 py-3">
       {buttonGoBack && <ButtonGoBack />}
       <Image source={BrandLogo} className="h-10 w-36" />
-      <TouchableOpacity activeOpacity={0.8}>
-        <Image source={userInfo.photoURL} className="h-10 w-10 rounded-full" />
-      </TouchableOpacity>
+      {user.profileImage && (
+        <TouchableOpacity activeOpacity={0.8}>
+          <Image
+            source={user.profileImage}
+            className="h-10 w-10 rounded-full"
+          />
+        </TouchableOpacity>
+      )}
     </View>
   )
 }

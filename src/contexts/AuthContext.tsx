@@ -1,96 +1,63 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useState } from 'react'
 
-import { Children, User } from '@@types/index'
+import { Children, UserCredentials } from '@@types/index'
 import { useChatContext } from '@hooks/useChatInfo'
+import { api } from '@src/config/axios'
 
-import { FIREBASE_ANDROID_CLIENT } from '@env'
-import auth from '@react-native-firebase/auth'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { AxiosError } from 'axios'
 
-type AuthDataProps = {
-  token: string | null
-  userInfo: User
-  isUserLoading: boolean
-  signIn: () => void
-  signOut: () => void
+type AuthCredentials = {
+  email: string
+  password: string
 }
 
-GoogleSignin.configure({
-  webClientId: FIREBASE_ANDROID_CLIENT,
-})
+type AuthDataProps = {
+  user: UserCredentials
+  isUserLoading: boolean
+  login: (value: AuthCredentials) => Promise<void>
+}
 
 export const AuthContext = createContext({} as AuthDataProps)
 
 export const AuthContextProvider = ({ children }: Children) => {
-  const [token, setToken] = useState<string | null>('')
-  const [userInfo, setUserInfo] = useState<User>({} as User)
+  const { connectUserInChat, updateUserProfile } = useChatContext()
+
+  const [userCredentials, setUserCredentials] = useState<UserCredentials>(
+    {} as UserCredentials,
+  )
   const [isUserLoading, setIsUserLoading] = useState(false)
 
-  const { connectUserInChat, disconnectUser, updateUserProfile } =
-    useChatContext()
-
-  async function handleSignInWithGoogle() {
+  async function login(credentials: AuthCredentials) {
+    setIsUserLoading(true)
     try {
-      await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
+      const { data } = await api.post<UserCredentials>(
+        '/api/login',
+        credentials,
+      )
+
+      setUserCredentials({
+        email: data.email,
+        name: data.name,
+        profileImage: data.profileImage,
+        isProfessional: data.isProfessional,
       })
 
-      const { idToken } = await GoogleSignin.signIn()
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken)
+      await connectUserInChat(data.email)
 
-      const { user } = await auth().signInWithCredential(googleCredential)
-
+      await updateUserProfile(data.name, data.profileImage)
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        console.log(err.response?.data)
+      }
       setIsUserLoading(false)
-
-      if (user && idToken) {
-        setToken(idToken)
-        setUserInfo(user)
-        await connectUserInChat(user.uid)
-        if (user.displayName && user.photoURL) {
-          await updateUserProfile(user.displayName, user.photoURL)
-        }
-      }
-    } catch (error) {
-      console.log(`Login error => ${error}`)
+    } finally {
+      setIsUserLoading(false)
     }
   }
-
-  async function handleSignOut() {
-    try {
-      await GoogleSignin.revokeAccess()
-      await auth().signOut()
-      setUserInfo({} as User)
-      setToken(null)
-      disconnectUser()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function signIn() {
-    setIsUserLoading(true)
-    await handleSignInWithGoogle()
-  }
-
-  function signOut() {
-    setIsUserLoading(true)
-    handleSignOut()
-    setIsUserLoading(false)
-  }
-
-  useEffect(() => {
-    const listener = auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUserInfo(user)
-      }
-    })
-
-    return listener
-  }, [token])
 
   return (
     <AuthContext.Provider
-      value={{ signIn, userInfo, isUserLoading, signOut, token }}
+      value={{ isUserLoading, login, user: userCredentials }}
     >
       {children}
     </AuthContext.Provider>

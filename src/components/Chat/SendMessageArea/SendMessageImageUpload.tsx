@@ -10,7 +10,7 @@ import colors from 'tailwindcss/colors'
 
 const ImageIcon = styled(Image)
 
-export const ImageUpload = () => {
+export const SendMessageImageUpload = () => {
   const [image, setImage] = useState<string | null>(null)
 
   const pickImage = async () => {

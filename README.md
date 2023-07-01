@@ -23,7 +23,7 @@ Certifique-se de ter as seguintes dependências instaladas para executar o proje
 
 ### Instalação
 
-1. Clone o repositório do projeto: git clone <URL_DO_REPOSITÓRIO>
+1. Clone o repositório do projeto: git clone https://github.com/inflowtop/inflow-platform-app
 2. Navegue até o diretório do projeto: `cd inflow-platform-app`
 3. Instale as dependências do projeto: `yarn`
 
@@ -38,9 +38,9 @@ Certifique-se de ter as seguintes dependências instaladas para executar o proje
 ### Env variables
 
 ```js
-  FIREBASE_ANDROID_CLIENT=""
-  SENDBIRD_APP_ID=""
-  SENDBIRD_API_TOKEN=""
+FIREBASE_ANDROID_CLIENT = "";
+SENDBIRD_APP_ID = "";
+SENDBIRD_API_TOKEN = "";
 ```
 
 ## Executando a Aplicação

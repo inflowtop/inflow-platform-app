@@ -5,6 +5,7 @@ export declare global {
       Chat: undefined
       Login: undefined
       Channel: undefined
+      FindContact: undefined
     }
   }
 }

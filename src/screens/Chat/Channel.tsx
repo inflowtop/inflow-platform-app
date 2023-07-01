@@ -132,7 +132,7 @@ export const Channel = () => {
     }
     channel
       .sendUserMessage(params)
-      .onPending(() => { })
+      .onPending(() => {})
       .onFailed((err: Error, message: BaseMessage) => {
         console.log(err, message)
       })
@@ -152,7 +152,7 @@ export const Channel = () => {
       <Header userName={userName || ''} />
       <ScrollView
         ref={scrollViewRef}
-        className="border-b border-t border-gray-300/50 bg-gray-200 px-4 pt-2"
+        className="border-b border-t border-gray-300/50 bg-gray-300 px-4 pt-2"
       >
         {messages.map((msg) => {
           if (msg instanceof UserMessage) {
@@ -173,7 +173,13 @@ export const Channel = () => {
       </ScrollView>
       <SendMessage.Root>
         <SendMessage.Input handler={handleSetMessage} value={message} />
-        <SendMessage.Actions handler={handleSendMessage} message={message} />
+        <SendMessage.Actions>
+          <SendMessage.ImageUpload />
+          <SendMessage.SendButton
+            sendMessage={handleSendMessage}
+            noMessage={message.length === 0}
+          />
+        </SendMessage.Actions>
       </SendMessage.Root>
     </SafeAreaView>
   )

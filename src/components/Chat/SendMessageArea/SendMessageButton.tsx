@@ -12,7 +12,10 @@ type SendButtonProps = {
 
 const SendIcon = styled(CaretCircleRight)
 
-export const SendButton = ({ noMessage, sendMessage }: SendButtonProps) => {
+export const SendMessageButton = ({
+  noMessage,
+  sendMessage,
+}: SendButtonProps) => {
   return (
     <TouchableOpacity
       className="ml-1"

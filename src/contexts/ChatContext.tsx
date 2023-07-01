@@ -15,10 +15,10 @@ import {
 
 type ChatDataProps = {
   userCred: User
+  usersInChat: User[]
   connectUserInChat: (userId: string) => Promise<void>
   updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
   disconnectUser: () => void
-  usersInChat: User[]
   createOneToOneChannel: (
     userId: string,
     friendId: string,

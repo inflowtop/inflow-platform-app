@@ -39,7 +39,7 @@ export const BallonMessage = ({
         className={`flex-row rounded-lg px-4 py-3 ${
           isSender
             ? 'rounded-tr-none bg-blue-500'
-            : 'rounded-tl-none bg-gray-300'
+            : 'rounded-tl-none bg-gray-400/30'
         }`}
       >
         <Text className={`${isSender ? 'text-gray-50' : 'text-gray-800'}`}>
