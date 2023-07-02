@@ -29,6 +29,7 @@ export const Channel = () => {
   const [messages, setMessages] = useState<BaseMessage[]>([])
   const [channel, setChannel] = useState<GroupChannel>()
   const [isTyping, setIsTyping] = useState(false)
+  const [readReceipts, setReadReceipts] = useState<Record<string, boolean>>({})
 
   const scrollViewRef = useRef<ScrollView>(null)
 
@@ -37,48 +38,62 @@ export const Channel = () => {
   const UNIQUE_HANDLER_ID = 'UNIQUE_HANDLER_ID'
 
   useEffect(() => {
-    const onFocus = () => {
-      if (!channel) return
-      channel.markAsRead()
-    }
-
-    const unsubscribe = navigation.addListener('focus', onFocus)
-
     async function loadPreviousMessages() {
       try {
         const groupChannel = await sb.groupChannel.getChannel(channelUrl)
         setChannel(groupChannel)
 
-        const messageCollection = groupChannel.createMessageCollection()
+        function updateReadReceipts() {
+          const newReadReceipts: Record<string, boolean> = {}
+          messages.forEach((message) => {
+            const readStatus = groupChannel.getReadStatus()
+            console.log('Read status:', readStatus)
+            console.log('Message created at:', message.createdAt)
+            newReadReceipts[message.messageId] = Object.entries(readStatus)
+              .filter(([userId]) => userId !== sb.currentUser.userId)
+              .every(([_, status]) => {
+                console.log('Read at:', status.readAt)
+                return status.readAt >= message.createdAt
+              })
+            console.log('New read receipts:', newReadReceipts)
+          })
+          setReadReceipts(newReadReceipts)
+        }
 
-        if (messageCollection.hasPrevious) {
-          const loadedMessages = await messageCollection.loadPrevious()
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            ...loadedMessages.filter(
-              (newMessage) =>
-                !prevMessages.find(
-                  (msg) => msg.messageId === newMessage.messageId,
-                ),
-            ),
-          ])
+        if (messages.length === 0) {
+          const messageCollection = groupChannel.createMessageCollection()
+
+          if (messageCollection.hasPrevious) {
+            const loadedMessages = await messageCollection.loadPrevious()
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              ...loadedMessages.filter(
+                (newMessage) =>
+                  !prevMessages.find(
+                    (msg) => msg.messageId === newMessage.messageId,
+                  ),
+              ),
+            ])
+
+            updateReadReceipts()
+          }
         }
 
         const groupChannelHandler: GroupChannelHandler =
           new GroupChannelHandler({
-            onMessageReceived: (channel: BaseChannel, message: BaseMessage) => {
-              setMessages((prevMessages) => [...prevMessages, message])
-            },
-            onMessageUpdated: (
+            onMessageReceived: async (
               channel: BaseChannel,
               message: BaseMessage,
-            ) => {},
-            onMessageDeleted: (channel: BaseChannel, messageId: number) => {},
-            onUndeliveredMemberStatusUpdated: (channel: GroupChannel) => {},
-            onUnreadMemberStatusUpdated: (channel: GroupChannel) => {},
+            ) => {
+              setMessages((prevMessages) => [...prevMessages, message])
+              await groupChannel.markAsRead()
+            },
             onTypingStatusUpdated: (channel: GroupChannel) => {
               const typingMembers = channel.getTypingUsers()
               setIsTyping(typingMembers.length > 0)
+            },
+            onChannelChanged: async (channel) => {
+              updateReadReceipts()
             },
           })
 
@@ -88,15 +103,14 @@ export const Channel = () => {
         )
 
         scrollViewRef.current?.scrollToEnd({ animated: false })
+
       } catch (error) {
         console.error(error)
       }
     }
 
     loadPreviousMessages()
-
-    return unsubscribe
-  }, [channelUrl, channel, navigation, isTyping])
+  }, [channelUrl, channel, navigation, isTyping, messages, readReceipts])
 
   function handleSetMessage(text: string) {
     setMessage(text)
@@ -152,6 +166,7 @@ export const Channel = () => {
                 key={msg.messageId}
                 data={msg}
                 isSender={userCred.userId === msg.sender.userId}
+                messageRead={readReceipts[msg.messageId]}
               />
             )
           } else {
