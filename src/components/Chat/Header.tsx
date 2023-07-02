@@ -18,7 +18,7 @@ export const Header = ({ data }: HeaderProps) => {
     <View className="w-full flex-row items-center justify-between px-4 py-3">
       <View className="flex-row items-center">
         <ButtonGoBack style="mr-3" />
-        {data.profileImage ? (
+        {data?.profileImage ? (
           <Image source={data.profileImage} className="h-9 w-9 rounded-full" />
         ) : (
           <UserCircle size={36} weight="duotone" />

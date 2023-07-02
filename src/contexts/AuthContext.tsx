@@ -36,13 +36,14 @@ export const AuthContextProvider = ({ children }: Children) => {
       )
 
       setUserCredentials({
+        id: data.id,
         email: data.email,
         name: data.name,
         profileImage: data.profileImage,
         isProfessional: data.isProfessional,
       })
 
-      await connectUserInChat(data.email)
+      await connectUserInChat(data.id)
 
       await updateUserProfile(data.name, data.profileImage)
     } catch (err) {

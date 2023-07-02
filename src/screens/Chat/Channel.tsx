@@ -146,10 +146,15 @@ export const Channel = () => {
   const currentMember = channel?.members.find(
     (member) => member.userId !== userCred.userId,
   )
-  const userName = currentMember?.nickname
+
   return (
     <SafeAreaView className="flex-1">
-      <Header userName={userName || ''} />
+      <Header
+        data={{
+          userName: currentMember?.nickname!,
+          profileImage: currentMember?.profileUrl!,
+        }}
+      />
       <ScrollView
         ref={scrollViewRef}
         className="border-b border-t border-gray-300/50 bg-gray-300 px-4 pt-2"
