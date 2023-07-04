@@ -24,8 +24,10 @@ type ProfessionalsInfo = {
 type ChatDataProps = {
   userCred: User
   usersList: User[]
-  friendList: User[]
   professionals: ProfessionalsInfo[]
+  friendList: User[]
+  setFriendList: (value: User[]) => void
+  getFriendList: () => Promise<User[]>
   connectUserInChat: (userId: string) => Promise<void>
   updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
   disconnectUser: () => void
@@ -94,22 +96,11 @@ export const ChatContextProvider = ({ children }: Children) => {
       return []
     }
 
-    const friends = activeChannels.map((channel) =>
-      channel.members
-        .filter((member) => member.userId !== userCred.userId)
-        .map((member) => member.userId),
-    )
-
-    const friendsIds = friends.flatMap((friend) => friend)
-
-    const queryParams: ApplicationUserListQueryParams = {
-      limit: 20,
-      userIdsFilter: friendsIds || ['default'],
-    }
-
-    const query = sb.createApplicationUserListQuery(queryParams)
-
-    return query.next()
+    return activeChannels
+      .map((channel) =>
+        channel.members.filter((member) => member.userId !== userCred.userId),
+      )
+      .flatMap((friend) => friend)
   }
 
   async function connectUserInChat(userId: string) {
@@ -118,6 +109,7 @@ export const ChatContextProvider = ({ children }: Children) => {
       const users = await getActiveUsers()
       const professionals = await getProfessionals()
       const friends = await getFriendList()
+      console.log('ISSO AQUI O ==>> ', JSON.stringify(friends))
       setFriendList(friends)
       setProfessionals(professionals)
       setUsersList(users)
@@ -150,6 +142,8 @@ export const ChatContextProvider = ({ children }: Children) => {
     <ChatContext.Provider
       value={{
         userCred,
+        setFriendList,
+        getFriendList,
         friendList,
         usersList,
         professionals,
