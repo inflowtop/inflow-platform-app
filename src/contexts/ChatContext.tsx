@@ -90,6 +90,10 @@ export const ChatContextProvider = ({ children }: Children) => {
   async function getFriendList() {
     const activeChannels = await getListOfActiveChannels()
 
+    if (activeChannels.length === 0) {
+      return []
+    }
+
     const friends = activeChannels.map((channel) =>
       channel.members
         .filter((member) => member.userId !== userCred.userId)
@@ -114,9 +118,6 @@ export const ChatContextProvider = ({ children }: Children) => {
       const users = await getActiveUsers()
       const professionals = await getProfessionals()
       const friends = await getFriendList()
-      console.log(
-        `FRIENDS QUE NAO ERAM PRA APARECER ==>> ${JSON.stringify(friends)}`,
-      )
       setFriendList(friends)
       setProfessionals(professionals)
       setUsersList(users)
