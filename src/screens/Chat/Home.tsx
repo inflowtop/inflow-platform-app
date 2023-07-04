@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ScrollView, TouchableOpacity, View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -14,8 +14,23 @@ import { UserPlus } from 'phosphor-react-native'
 const AddUser = styled(UserPlus)
 
 export const ChatHome = () => {
-  const { friendList, userCred } = useChatContext()
+  const { friendList, userCred, connectUserInChat } = useChatContext()
   const { navigate } = useNavigation()
+
+  const [prevFriendListLength, setPrevFriendListLength] = useState(0)
+
+  useEffect(() => {
+    console.log(friendList.length)
+    if (userCred.userId && friendList.length !== prevFriendListLength) {
+      connectUserInChat(userCred.userId)
+      setPrevFriendListLength(friendList.length)
+    }
+  }, [
+    connectUserInChat,
+    userCred.userId,
+    friendList.length,
+    prevFriendListLength,
+  ])
 
   const [search, setSearch] = useState('')
 
