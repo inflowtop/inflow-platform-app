@@ -17,11 +17,20 @@ export const ChatHome = () => {
   const { friendList, userCred, connectUserInChat } = useChatContext()
   const { navigate } = useNavigation()
 
+  const [prevFriendListLength, setPrevFriendListLength] = useState(0)
+
   useEffect(() => {
-    if (userCred.userId && friendList.length === 0) {
+    console.log(friendList.length)
+    if (userCred.userId && friendList.length !== prevFriendListLength) {
       connectUserInChat(userCred.userId)
+      setPrevFriendListLength(friendList.length)
     }
-  }, [connectUserInChat, userCred.userId, friendList.length])
+  }, [
+    connectUserInChat,
+    userCred.userId,
+    friendList.length,
+    prevFriendListLength,
+  ])
 
   const [search, setSearch] = useState('')
 
