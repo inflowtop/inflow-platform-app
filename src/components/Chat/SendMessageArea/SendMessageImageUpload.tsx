@@ -30,7 +30,7 @@ export const SendMessageImageUpload = ({
   }
 
   return (
-    <TouchableOpacity activeOpacity={0.7} onPress={() => handleSendImage()}>
+    <TouchableOpacity activeOpacity={0.7} onPress={pickImage}>
       <ImageIcon color={colors.blue['600']} size={32} />
     </TouchableOpacity>
   )

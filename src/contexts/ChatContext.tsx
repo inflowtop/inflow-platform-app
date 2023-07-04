@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'
+import React, { createContext, useState } from 'react'
 
 import { Children } from '@@types/Children'
 import { api } from '@src/config/axios'
@@ -69,6 +69,7 @@ export const ChatContextProvider = ({ children }: Children) => {
       filter: groupChannelFilter,
       order: GroupChannelListOrder.LATEST_LAST_MESSAGE,
     }
+
     const collection = sb.groupChannel.createGroupChannelCollection(params)
 
     if (collection.hasMore) {
@@ -99,8 +100,9 @@ export const ChatContextProvider = ({ children }: Children) => {
 
     const queryParams: ApplicationUserListQueryParams = {
       limit: 20,
-      userIdsFilter: friendsIds,
+      userIdsFilter: friendsIds || ['default'],
     }
+
     const query = sb.createApplicationUserListQuery(queryParams)
 
     return query.next()
@@ -112,6 +114,9 @@ export const ChatContextProvider = ({ children }: Children) => {
       const users = await getActiveUsers()
       const professionals = await getProfessionals()
       const friends = await getFriendList()
+      console.log(
+        `FRIENDS QUE NAO ERAM PRA APARECER ==>> ${JSON.stringify(friends)}`,
+      )
       setFriendList(friends)
       setProfessionals(professionals)
       setUsersList(users)
@@ -138,8 +143,6 @@ export const ChatContextProvider = ({ children }: Children) => {
 
     const users = await getActiveUsers()
     setUsersList(users)
-    const friends = await getFriendList()
-    setFriendList(friends)
   }
 
   return (

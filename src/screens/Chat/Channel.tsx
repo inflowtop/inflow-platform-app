@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Image } from 'expo-image'
 import { ImagePickerAsset } from 'expo-image-picker'
 
 import { BallonMessage, Header, Typing } from '@components/Chat'
+import { ImageMessage } from '@components/Chat/ImageMessage'
 import { SendMessage } from '@components/Chat/SendMessageArea'
 import { useChatContext } from '@hooks/useChatInfo'
 import { sb } from '@src/config/sendbird'
@@ -20,7 +20,6 @@ import {
   FileMessageCreateParams,
   FileMessage,
 } from '@sendbird/chat/message'
-import React from "react"
 
 type ChannelRouteParams = {
   channelUrl: string
@@ -134,7 +133,7 @@ export const Channel = () => {
     }
     channel
       .sendUserMessage(params)
-      .onPending(() => { })
+      .onPending(() => {})
       .onFailed((err: Error, message: BaseMessage) => {
         console.log(err, message)
       })
@@ -145,31 +144,32 @@ export const Channel = () => {
     setMessage('')
   }
 
-  function handleSendImage(imageAssets?: ImagePickerAsset) {
+  function handleSendImage(imageAssets: ImagePickerAsset) {
     if (!channel) return
 
-    // const uriSplit = imageAssets.uri.split('.')
-    // const fileNameSplit = uriSplit[uriSplit.length - 2].split('/')
+    const uriSplit = imageAssets.uri.split('.')
+    const fileNameSplit = uriSplit[uriSplit.length - 2].split('/')
 
-    // const fileExtension = uriSplit[uriSplit.length - 1]
-    // const fileName = fileNameSplit[fileNameSplit.length - 1]
-    // const type = imageAssets.type
+    const fileExtension = uriSplit[uriSplit.length - 1]
+    const fileName = fileNameSplit[fileNameSplit.length - 1]
+    const type = imageAssets.type
+
+    console.log(imageAssets.uri)
 
     const params: FileMessageCreateParams = {
-      fileUrl:
-        'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png',
-      fileName: 'image.png',
-      customType: '${type}/${fileExtension}',
+      fileUrl: imageAssets.uri,
+      fileName,
+      customType: `${type}/${fileExtension}`,
       thumbnailSizes: [{ maxWidth: 200, maxHeight: 200 }],
     }
 
     channel
       .sendFileMessage(params)
-      .onPending(() => { })
+      .onPending(() => {})
       .onFailed((err) => {
         console.log(`${err.name} ==>> ${err.message}`)
       })
-      .onSucceeded((file: FileMessage) => {
+      .onSucceeded((file) => {
         setMessages([...messages, file])
       })
   }
@@ -201,12 +201,12 @@ export const Channel = () => {
               />
             )
           } else if (msg instanceof FileMessage) {
-            console.log(msg)
             return (
-              <Image
+              <ImageMessage
                 key={msg.messageId}
-                source={{ uri: msg.url }}
-                className="h-32 w-32"
+                data={msg}
+                isSender={userCred.userId === msg.sender.userId}
+                messageRead={readReceipts[msg.messageId]}
               />
             )
           } else {

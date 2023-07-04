@@ -5,17 +5,34 @@
     "strict": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "react-native",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["./src/components/*"],
-      "@screens/*": ["./src/screens/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@contexts/*": ["./src/contexts/*"],
-      "@@types/*": ["./src/@types/*"],
-      "@src/*": ["./src/*"]
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@screens/*": [
+        "./src/screens/*"
+      ],
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@contexts/*": [
+        "./src/contexts/*"
+      ],
+      "@@types/*": [
+        "./src/@types/*"
+      ],
+      "@src/*": [
+        "./src/*"
+      ]
     },
-    "typeRoots": ["./src/@types", "./node_modules/@types"]
+    "typeRoots": [
+      "./src/@types",
+      "./node_modules/@types"
+    ]
   }
 }
