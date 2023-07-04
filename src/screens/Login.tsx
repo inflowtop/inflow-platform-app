@@ -54,10 +54,10 @@ export const Login = () => {
     login({
       email: userEmail,
       password: userPassword,
+    }).then(() => {
+      setUserEmail('')
+      setUserPassword('')
     })
-
-    setUserEmail('')
-    setUserPassword('')
   }
 
   return (
@@ -89,6 +89,7 @@ export const Login = () => {
             name="Password"
             value={userPassword}
             onChange={setUserPassword}
+            secureText
           />
         </LoginForm.Field>
         <Button onPress={handleLogin} isLoading={isUserLoading}>

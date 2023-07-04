@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { ScrollView, TouchableOpacity, View } from 'react-native'
+import { ScrollView, TouchableOpacity, View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Contact, Search } from '@components/Chat'
-import { Header, Loading } from '@components/common'
+import { Header } from '@components/common'
 import { useChatContext } from '@hooks/useChatInfo'
 
 import { styled } from 'nativewind'
@@ -14,14 +14,14 @@ import { UserPlus } from 'phosphor-react-native'
 const AddUser = styled(UserPlus)
 
 export const ChatHome = () => {
-  const { usersInChat, userCred } = useChatContext()
+  const { friendList, userCred } = useChatContext()
   const { navigate } = useNavigation()
 
   const [search, setSearch] = useState('')
 
   const filteredUsers =
-    usersInChat.length > 0
-      ? usersInChat
+    friendList.length > 0
+      ? friendList
           .filter((user) => user.userId !== userCred.userId)
           .filter((user) =>
             user.nickname.toLowerCase().startsWith(search.toLowerCase()),
@@ -43,12 +43,14 @@ export const ChatHome = () => {
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false} className="mb-4 mt-8">
-          {filteredUsers ? (
-            filteredUsers?.map((user) => (
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
               <Contact key={user.userId} user={user} />
             ))
           ) : (
-            <Loading />
+            <Text className="text-center text-sm text-gray-600">
+              Nenhuma conversa ativa
+            </Text>
           )}
         </ScrollView>
       </View>

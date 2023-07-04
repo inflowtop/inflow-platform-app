@@ -3,6 +3,7 @@ import { createContext, useState } from 'react'
 import { Children, UserCredentials } from '@@types/index'
 import { useChatContext } from '@hooks/useChatInfo'
 import { api } from '@src/config/axios'
+import { alertError } from '@src/utils/alert-error-message'
 
 import { AxiosError } from 'axios'
 
@@ -48,7 +49,7 @@ export const AuthContextProvider = ({ children }: Children) => {
       await updateUserProfile(data.name, data.profileImage)
     } catch (err) {
       if (err instanceof AxiosError) {
-        console.log(err.response?.data)
+        alertError(err.response?.data.message)
       }
       setIsUserLoading(false)
     } finally {

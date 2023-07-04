@@ -7,14 +7,14 @@ import { Header, Loading } from '@components/common'
 import { useChatContext } from '@hooks/useChatInfo'
 
 export const FindContact = () => {
-  const { usersInChat, userCred, professionals } = useChatContext()
+  const { usersList, userCred, professionals } = useChatContext()
 
   const [search, setSearch] = useState('')
 
   const filteredProfessionals = []
 
   for (const professional of professionals) {
-    const userMatched = usersInChat.find((user) => {
+    const userMatched = usersList.find((user) => {
       return user.userId === professional.professionalId
     })
     if (userMatched) {
@@ -37,7 +37,7 @@ export const FindContact = () => {
       <View className="px-6 py-3">
         <Search search={search} setSearch={setSearch} />
         <ScrollView showsVerticalScrollIndicator={false} className="mb-4 mt-8">
-          {filteredUsers ? (
+          {filteredUsers.length > 0 ? (
             filteredUsers?.map((user) => (
               <Contact key={user.userId} user={user} />
             ))

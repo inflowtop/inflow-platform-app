@@ -12,6 +12,8 @@ import {
 import {
   GroupChannel,
   GroupChannelCreateParams,
+  GroupChannelFilter,
+  GroupChannelListOrder,
 } from '@sendbird/chat/groupChannel'
 
 type ProfessionalsInfo = {
@@ -21,7 +23,8 @@ type ProfessionalsInfo = {
 
 type ChatDataProps = {
   userCred: User
-  usersInChat: User[]
+  usersList: User[]
+  friendList: User[]
   professionals: ProfessionalsInfo[]
   connectUserInChat: (userId: string) => Promise<void>
   updateUserProfile: (nickname: string, profileImage: string) => Promise<void>
@@ -36,7 +39,8 @@ export const ChatContext = createContext({} as ChatDataProps)
 
 export const ChatContextProvider = ({ children }: Children) => {
   const [userCred, setUserCred] = useState({} as User)
-  const [usersInChat, setUsersInChat] = useState<User[]>([])
+  const [usersList, setUsersList] = useState<User[]>([])
+  const [friendList, setFriendList] = useState<User[]>([])
   const [professionals, setProfessionals] = useState<ProfessionalsInfo[]>([])
 
   async function createOneToOneChannel(
@@ -59,9 +63,45 @@ export const ChatContextProvider = ({ children }: Children) => {
     return data
   }
 
+  async function getListOfActiveChannels() {
+    const groupChannelFilter = new GroupChannelFilter()
+
+    const params = {
+      filter: groupChannelFilter,
+      order: GroupChannelListOrder.LATEST_LAST_MESSAGE,
+    }
+    const collection = sb.groupChannel.createGroupChannelCollection(params)
+
+    if (collection.hasMore) {
+      return await collection.loadMore()
+    }
+
+    return []
+  }
+
   async function getActiveUsers() {
     const queryParams: ApplicationUserListQueryParams = {
       limit: 20,
+    }
+    const query = sb.createApplicationUserListQuery(queryParams)
+
+    return query.next()
+  }
+
+  async function getFriendList() {
+    const activeChannels = await getListOfActiveChannels()
+
+    const friends = activeChannels.map((channel) =>
+      channel.members
+        .filter((member) => member.userId !== userCred.userId)
+        .map((member) => member.userId),
+    )
+
+    const friendsIds = friends.flatMap((friend) => friend)
+
+    const queryParams: ApplicationUserListQueryParams = {
+      limit: 20,
+      userIdsFilter: friendsIds,
     }
     const query = sb.createApplicationUserListQuery(queryParams)
 
@@ -73,8 +113,10 @@ export const ChatContextProvider = ({ children }: Children) => {
       await sb.connect(userId)
       const users = await getActiveUsers()
       const professionals = await getProfessionals()
+      const friends = await getFriendList()
+      setFriendList(friends)
       setProfessionals(professionals)
-      setUsersInChat(users)
+      setUsersList(users)
     } catch (err) {
       if (err) {
         console.error(`Sendbird connection error =>> ${err}`)
@@ -97,14 +139,17 @@ export const ChatContextProvider = ({ children }: Children) => {
     setUserCred(user)
 
     const users = await getActiveUsers()
-    setUsersInChat(users)
+    setUsersList(users)
+    const friends = await getFriendList()
+    setFriendList(friends)
   }
 
   return (
     <ChatContext.Provider
       value={{
         userCred,
-        usersInChat,
+        friendList,
+        usersList,
         professionals,
         connectUserInChat,
         updateUserProfile,

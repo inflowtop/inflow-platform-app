@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import * as ImagePicker from 'expo-image-picker'
@@ -10,9 +9,13 @@ import colors from 'tailwindcss/colors'
 
 const ImageIcon = styled(Image)
 
-export const SendMessageImageUpload = () => {
-  const [image, setImage] = useState<string | null>(null)
+type SendMessageImageUploadProps = {
+  handleSendImage: (assets: ImagePicker.ImagePickerAsset) => void
+}
 
+export const SendMessageImageUpload = ({
+  handleSendImage,
+}: SendMessageImageUploadProps) => {
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -22,10 +25,8 @@ export const SendMessageImageUpload = () => {
     })
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri)
+      handleSendImage(result.assets[0])
     }
-
-    console.log(image)
   }
 
   return (

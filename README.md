@@ -53,7 +53,8 @@ SENDBIRD_API_TOKEN = "";
 
 A aplicação possui as seguintes funcionalidades:
 
-- Autenticação com o Google através do Firebase.
-  Conexão entre usuários da plataforma Inflow através do chat 1-1.
+- Login com o usuário cadastrado na Inflow.
+- Conexão entre provider e customer da plataforma Inflow através do chat 1-1.
 - Envio de mensagens em tempo real utilizando o - SDK JavaScript do Sendbird.
-  Listagem de conversas e histórico de mensagens.
+- Listagem de conversas e histórico de mensagens.
+- Buscar por um provider e iniciar uma conversa

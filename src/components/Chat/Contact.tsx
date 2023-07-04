@@ -37,10 +37,7 @@ export const Contact = ({ user }: ConnectionProps) => {
       onPress={() => handlePushToChannel()}
       className="relative flex-row items-center gap-4 pb-6"
     >
-      <Image
-        source={user.profileUrl || 'https://github.com/patricks-js.png'}
-        className="h-14 w-14 rounded-lg"
-      />
+      <Image source={user.profileUrl} className="h-14 w-14 rounded-full" />
       <View className="h-14 justify-evenly">
         <Text className="font-title text-base">{user.nickname}</Text>
         <Text className="text-gray-500">{user.connectionStatus}</Text>
