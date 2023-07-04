@@ -21,3 +21,5 @@ web-build/
 channel.json
 message.json
 AuthGoogleContext.tsx
+
+package.json.lock
