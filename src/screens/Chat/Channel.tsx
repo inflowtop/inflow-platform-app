@@ -2,13 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { ScrollView, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { ImagePickerAsset } from 'expo-image-picker'
-
 import { BallonMessage, Header, Typing } from '@components/Chat'
 import { ImageMessage } from '@components/Chat/ImageMessage'
 import { SendMessage } from '@components/Chat/SendMessageArea'
 import { useChatContext } from '@hooks/useChatInfo'
 import { sb } from '@src/config/sendbird'
+import { uploadImageToFirebaseStorage } from '@src/utils/upload-image-to-database'
 
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { BaseChannel } from '@sendbird/chat'
@@ -144,34 +143,31 @@ export const Channel = () => {
     setMessage('')
   }
 
-  function handleSendImage(imageAssets: ImagePickerAsset) {
+  async function handleSendImage(fileName: string, type: string, uri: string) {
     if (!channel) return
 
-    const uriSplit = imageAssets.uri.split('.')
-    const fileNameSplit = uriSplit[uriSplit.length - 2].split('/')
+    try {
+      const fileUrl = await uploadImageToFirebaseStorage(uri, fileName)
 
-    const fileExtension = uriSplit[uriSplit.length - 1]
-    const fileName = fileNameSplit[fileNameSplit.length - 1]
-    const type = imageAssets.type
+      const params: FileMessageCreateParams = {
+        fileUrl,
+        fileName,
+        customType: type,
+        thumbnailSizes: [{ maxWidth: 200, maxHeight: 200 }],
+      }
 
-    console.log(imageAssets.uri)
-
-    const params: FileMessageCreateParams = {
-      fileUrl: imageAssets.uri,
-      fileName,
-      customType: `${type}/${fileExtension}`,
-      thumbnailSizes: [{ maxWidth: 200, maxHeight: 200 }],
+      channel
+        .sendFileMessage(params)
+        .onPending(() => {})
+        .onFailed((err) => {
+          console.log(err)
+        })
+        .onSucceeded((file) => {
+          setMessages([...messages, file])
+        })
+    } catch (err) {
+      console.log(err)
     }
-
-    channel
-      .sendFileMessage(params)
-      .onPending(() => {})
-      .onFailed((err) => {
-        console.log(`${err.name} ==>> ${err.message}`)
-      })
-      .onSucceeded((file) => {
-        setMessages([...messages, file])
-      })
   }
 
   const currentMember = channel?.members.find(

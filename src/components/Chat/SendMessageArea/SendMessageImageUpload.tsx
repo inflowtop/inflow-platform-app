@@ -10,7 +10,7 @@ import colors from 'tailwindcss/colors'
 const ImageIcon = styled(Image)
 
 type SendMessageImageUploadProps = {
-  handleSendImage: (assets: ImagePicker.ImagePickerAsset) => void
+  handleSendImage: (filename: string, type: string, uri: string) => void
 }
 
 export const SendMessageImageUpload = ({
@@ -25,7 +25,18 @@ export const SendMessageImageUpload = ({
     })
 
     if (!result.canceled) {
-      handleSendImage(result.assets[0])
+      const image = result.assets[0]
+
+      const uriSplit = image.uri.split('.')
+
+      const filename = image.uri.substring(
+        image.uri.lastIndexOf('/') + 1,
+        image.uri.length,
+      )
+      const fileExtension = uriSplit[uriSplit.length - 1]
+      const type = `${image.type}/${fileExtension}`
+
+      handleSendImage(filename, type, image.uri)
     }
   }
 

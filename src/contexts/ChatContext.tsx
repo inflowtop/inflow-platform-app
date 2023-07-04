@@ -90,6 +90,10 @@ export const ChatContextProvider = ({ children }: Children) => {
   async function getFriendList() {
     const activeChannels = await getListOfActiveChannels()
 
+    if (activeChannels.length === 0) {
+      return []
+    }
+
     const friends = activeChannels.map((channel) =>
       channel.members
         .filter((member) => member.userId !== userCred.userId)
