@@ -59,7 +59,6 @@ export const ChatContextProvider = ({ children }: Children) => {
     const { data } = await api.get<ProfessionalsInfo[]>(
       '/api/get-professionals',
     )
-
     return data
   }
 
@@ -84,7 +83,6 @@ export const ChatContextProvider = ({ children }: Children) => {
       limit: 20,
     }
     const query = sb.createApplicationUserListQuery(queryParams)
-
     return query.next()
   }
 
@@ -119,7 +117,7 @@ export const ChatContextProvider = ({ children }: Children) => {
       setUsersList(users)
     } catch (err) {
       if (err) {
-        console.error(`Sendbird connection error =>> ${err}`)
+        console.error(`Sendbird connection error =>> ${err}`, 'chatContext')
       }
     }
   }

@@ -20,6 +20,7 @@ import {
   FileMessageCreateParams,
   FileMessage,
 } from '@sendbird/chat/message'
+import React from "react"
 
 type ChannelRouteParams = {
   channelUrl: string
@@ -52,15 +53,12 @@ export const Channel = () => {
           const newReadReceipts: Record<string, boolean> = {}
           messages.forEach((message) => {
             const readStatus = groupChannel.getReadStatus()
-            console.log('Read status:', readStatus)
-            console.log('Message created at:', message.createdAt)
             newReadReceipts[message.messageId] = Object.entries(readStatus)
               .filter(([userId]) => userId !== sb.currentUser.userId)
               .every(([_, status]) => {
                 console.log('Read at:', status.readAt)
                 return status.readAt >= message.createdAt
               })
-            console.log('New read receipts:', newReadReceipts)
           })
           setReadReceipts(newReadReceipts)
         }
@@ -109,7 +107,7 @@ export const Channel = () => {
 
         scrollViewRef.current?.scrollToEnd({ animated: false })
       } catch (error) {
-        console.error(error)
+        console.error(error, 'Channel screen')
       }
     }
 
@@ -136,7 +134,7 @@ export const Channel = () => {
     }
     channel
       .sendUserMessage(params)
-      .onPending(() => {})
+      .onPending(() => { })
       .onFailed((err: Error, message: BaseMessage) => {
         console.log(err, message)
       })
@@ -147,27 +145,27 @@ export const Channel = () => {
     setMessage('')
   }
 
-  function handleSendImage(imageAssets: ImagePickerAsset) {
+  function handleSendImage(imageAssets?: ImagePickerAsset) {
     if (!channel) return
 
-    const uriSplit = imageAssets.uri.split('.')
-    const fileNameSplit = uriSplit[uriSplit.length - 2].split('/')
+    // const uriSplit = imageAssets.uri.split('.')
+    // const fileNameSplit = uriSplit[uriSplit.length - 2].split('/')
 
-    const fileExtension = uriSplit[uriSplit.length - 1]
-    const fileName = fileNameSplit[fileNameSplit.length - 1]
-    const type = imageAssets.type
+    // const fileExtension = uriSplit[uriSplit.length - 1]
+    // const fileName = fileNameSplit[fileNameSplit.length - 1]
+    // const type = imageAssets.type
 
     const params: FileMessageCreateParams = {
       fileUrl:
         'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png',
-      fileName,
-      customType: `${type}/${fileExtension}`,
+      fileName: 'image.png',
+      customType: '${type}/${fileExtension}',
       thumbnailSizes: [{ maxWidth: 200, maxHeight: 200 }],
     }
 
     channel
       .sendFileMessage(params)
-      .onPending(() => {})
+      .onPending(() => { })
       .onFailed((err) => {
         console.log(`${err.name} ==>> ${err.message}`)
       })
@@ -207,8 +205,8 @@ export const Channel = () => {
             return (
               <Image
                 key={msg.messageId}
-                source={msg.url}
-                className="h-auto w-32"
+                source={{ uri: msg.url }}
+                className="h-32 w-32"
               />
             )
           } else {

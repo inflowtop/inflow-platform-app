@@ -27,7 +27,7 @@ export const Contact = ({ user }: ConnectionProps) => {
       const channel = await createOneToOneChannel(userCred.userId, user.userId)
       navigation.navigate('Channel', { channelUrl: channel.url })
     } catch (err) {
-      console.error(err)
+      console.error(err, 'Contact component')
     }
   }
 
