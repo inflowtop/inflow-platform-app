@@ -50,6 +50,8 @@ export const AuthContextProvider = ({ children }: Children) => {
     } catch (err) {
       if (err instanceof AxiosError) {
         alertError(err.response?.data.message)
+      } else if (err instanceof Error) {
+        alertError(err.message)
       }
       setIsUserLoading(false)
     } finally {
