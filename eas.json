@@ -2,11 +2,21 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://inflow-chat-api.onrender.com"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_URL": "https://inflow-chat-api.onrender.com"
+      }
     },
-    "production": {}
+    "production": {
+      "env": {
+        "API_URL": "https://inflow-chat-api.onrender.com"
+      }
+    }
   }
 }
