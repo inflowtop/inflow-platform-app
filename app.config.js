@@ -1,15 +1,3 @@
-const extraConfig = {
-  apiUrl: 'https://127.0.1.1:3333',
-  sendbirdAppId: process.env.SENDBIRD_APP_ID,
-  sendbirdApiToken: process.env.SENDBIRD_API_TOKEN,
-  enableHiddenFeatures: true,
-}
-
-if (process.env.APP_ENV === 'production' || process.env.APP_ENV === 'preview') {
-  extraConfig.apiUrl = process.env.API_URL
-  extraConfig.enableHiddenFeatures = false
-}
-
 module.exports = {
   name: 'inflow-platform-app',
   slug: 'inflow-platform-app',
@@ -48,7 +36,10 @@ module.exports = {
     eas: {
       projectId: 'b62e6d1c-454f-41be-a79b-aafd14ae9d93',
     },
-    ...extraConfig,
+    apiUrl: process.env.API_URL ?? 'https://127.0.1.1:3333',
+    sendbirdAppId: process.env.SENDBIRD_APP_ID,
+    sendbirdApiToken: process.env.SENDBIRD_API_TOKEN,
+    enableHiddenFeatures: false,
   },
   plugins: [
     '@react-native-firebase/app',
