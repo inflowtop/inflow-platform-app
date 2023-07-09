@@ -1,9 +1,9 @@
 module.exports = {
-  name: 'inflow-platform-app',
+  name: 'Inflow',
   slug: 'inflow-platform-app',
   scheme: 'inflow-platform-app',
   owner: 'inflowusa',
-  version: '1.0.0',
+  version: '1.0.1',
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'light',
@@ -16,17 +16,15 @@ module.exports = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'com.inflowusa.inflowplatformapp',
-    googleServicesFile:
-      process.env.GOOGLE_SERVICES_PLIST ?? './GoogleService-Info.plist',
+    googleServicesFile: './GoogleService-Info.plist',
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: './assets/adaptive-icon.png',
+      foregroundImage: './assets/icon.png',
       backgroundColor: '#ffffff',
     },
     package: 'com.inflowusa.inflowplatformapp',
-    googleServicesFile:
-      process.env.GOOGLE_SERVICES_JSON ?? './google-services.json',
+    googleServicesFile: './google-services.json',
     permissions: ['android.permission.RECORD_AUDIO'],
   },
   web: {
