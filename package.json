@@ -19,6 +19,7 @@
     "@react-navigation/native-stack": "^6.9.12",
     "@sendbird/chat": "^4.8.5",
     "axios": "^1.4.0",
+    "eas-cli": "^3.15.1",
     "expo": "~48.0.18",
     "expo-application": "~5.1.1",
     "expo-constants": "~14.2.1",

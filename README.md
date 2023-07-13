@@ -29,32 +29,40 @@ Certifique-se de ter as seguintes dependências instaladas para executar o proje
 
 ### Configuração do Firebase
 
-1. Crie um projeto no Firebase (https://firebase.google.com) e obtenha as credenciais necessárias.
+O projeto utiliza algumas ferramentas do firebase como o **firebase storage** para integrar a funcionalidade de envio das imagens (também serve para arquivos) durante a troca de mensagens entre os clientes da Inflow.
+
+1. Entre no console do firebase da Inflow para ter acesso aos arquivos de configuração de cada ambiente (Android, iOS).
+2. Para novas features ou correção de bugs, leia as docs do [<u>**react-native-firebase**</u>](https://rnfirebase.io/)
 
 ### Configuração do Sendbird
 
-1. Crie uma conta no Sendbird (https://sendbird.com) e crie um novo aplicativo.
+1. Entre na dashboard do sendbird da Inflow para ter acesso as credenciais.
 
-### Env variables
+### Variáveis de ambiente necessárias
+
+**Produção**
+
+A aplicação está na conta da Inflow dentro da plataforma da Expo. Todas as configurações de variáveis de ambiente estão na página de **secrets**. [<u>**Clique aqui para acessa**</u>](https://expo.dev/accounts/inflowusa/projects/inflow-platform-app/secrets)
+
+**Desenvolvimento**
+
+Para desenvolvimento local, é necessário configurar o [<u>**direnv**</u>](https://direnv.net/) no projeto, seguindo a documentação, e usar as e copiar as informações abaixo para o arquivo _env_ quer for criado.
 
 ```js
-FIREBASE_ANDROID_CLIENT = "";
-SENDBIRD_APP_ID = "";
-SENDBIRD_API_TOKEN = "";
+export FIREBASE_ANDROID_CLIENT=
+export SENDBIRD_APP_ID=
+export SENDBIRD_API_TOKEN=
 ```
 
 ## Executando a Aplicação
 
-1. Execute o comando: `expo start --dev-client`
-2. Acesse o aplicativo através do Expo Developer Tools no navegador.
-3. Utilize um emulador de dispositivo móvel ou instale o aplicativo Expo Go em um dispositivo físico para testar a aplicação.
-
-## Funcionalidades
-
-A aplicação possui as seguintes funcionalidades:
-
-- Login com o usuário cadastrado na Inflow.
-- Conexão entre provider e customer da plataforma Inflow através do chat 1-1.
-- Envio de mensagens em tempo real utilizando o - SDK JavaScript do Sendbird.
-- Listagem de conversas e histórico de mensagens.
-- Buscar por um provider e iniciar uma conversa
+<ol>
+  <li>Tenha instalado o <strong>emulador Android do Android Studio</strong> em sua máquina com o <strong>JDK 11 LTS</strong></li>
+  <li>Execute o comando: <code>expo start --dev-client</code></li>
+  <ol>
+    <li>Em caso de erro, execute os comandos abaixo</li>
+    <li><code>npx expo prebuild --clean</code></li>
+    <li><code>npx expo run:android</code></li>
+    <li>Isso será apenas na primeira vez</li>
+  </ol>
+</ol>
